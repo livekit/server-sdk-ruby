@@ -1,0 +1,15 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+    - 'vendor/**/*'
+  NewCops: enable
+  TargetRubyVersion: 2.7
+
+Layout/LineLength:
+  Max: 100
