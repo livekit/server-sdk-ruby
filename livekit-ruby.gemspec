@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'lib/live_kit/version'
+require_relative 'lib/livekit/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'livekit-ruby'
-  spec.version       = LiveKit::VERSION
+  spec.version       = Livekit::VERSION
   spec.authors       = ['Omri Gabay']
   spec.email         = ['omri.gabay@pnmac.com']
 
