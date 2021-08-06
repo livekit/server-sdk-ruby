@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'livekit-ruby'
   spec.version       = Livekit::VERSION
   spec.authors       = ['Omri Gabay']
-  spec.email         = ['omri.gabay@pnmac.com']
+  spec.email         = ['omri@omrigabay.me']
 
   spec.summary       = 'LiveKit Server SDK for Ruby'
   # spec.description   = "TODO: Write a longer description or delete this line."
@@ -29,9 +29,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  # Uncomment to register a new dependency of your gem
-  # spec.add_dependency "example-gem", "~> 1.0"
-  spec.add_development_dependency 'google-protobuf'
+  spec.add_dependency 'twirp', '~> 1.7.2'
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
