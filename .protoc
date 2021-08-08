@@ -1,0 +1,3 @@
+--proto_path=protocol
+--ruby_out=lib/livekit/proto
+--twirp_ruby_out=lib/livekit/proto
