@@ -7,7 +7,7 @@ require:
 AllCops:
   Exclude:
     - 'bin/**/*'
-    - 'lib/proto/**/*'
+    - 'lib/livekit/proto/**/*'
     - 'vendor/**/*'
   NewCops: enable
   TargetRubyVersion: 2.7
