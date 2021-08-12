@@ -37,6 +37,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :type, :enum, 3, "livekit.TrackType"
       optional :width, :uint32, 4
       optional :height, :uint32, 5
+      optional :muted, :bool, 6
     end
     add_message "livekit.TrickleRequest" do
       optional :candidateInit, :string, 1
