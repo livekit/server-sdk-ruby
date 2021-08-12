@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     livekit-ruby (0.1.0)
+      jwt (~> 2.2.3)
       twirp (~> 1.7.2)
 
 GEM
@@ -31,6 +32,7 @@ GEM
     faraday-rack (1.0.0)
     google-protobuf (3.17.3)
     google-protobuf (3.17.3-x86_64-linux)
+    jwt (2.2.3)
     method_source (1.0.0)
     multipart-post (2.1.1)
     parallel (1.20.1)

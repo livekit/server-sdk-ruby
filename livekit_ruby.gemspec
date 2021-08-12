@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'jwt', '~> 2.2.3'
   spec.add_dependency 'twirp', '~> 1.7.2'
 
   # For more information and examples about making a new gem, checkout our
