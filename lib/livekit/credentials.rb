@@ -33,6 +33,13 @@ module Livekit
     end
 
     def to_jwt
+      payload = {
+        exp: Time.now.to_i + 4 * 60 * 60,
+        nbf: Time.now.to_i,
+        iss: @api_key
+      }
+      payload.merge!(@grants)
+      JWT.encode payload, @api_secret, 'HS256'
     end
   end
 end
