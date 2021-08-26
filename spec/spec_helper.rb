@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'livekit/ruby'
+require_relative '../lib/livekit'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

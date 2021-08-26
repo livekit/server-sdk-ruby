@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe Livekit::Ruby do
+RSpec.describe Livekit do
   it 'has a version number' do
-    expect(Livekit::Ruby::VERSION).not_to be nil
-  end
-
-  it 'does something useful' do
-    expect(false).to eq(true)
+    expect(Livekit::VERSION).not_to be nil
   end
 end
