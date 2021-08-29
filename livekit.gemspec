@@ -3,7 +3,7 @@
 require_relative 'lib/livekit/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'livekit-ruby'
+  spec.name          = 'livekit'
   spec.version       = Livekit::VERSION
   spec.authors       = ['Omri Gabay']
   spec.email         = ['omri@omrigabay.me']
