@@ -2,11 +2,11 @@
 
 module Livekit
   module Proto
-    FOLDER = Pathname.new(File.expand_path('lib/livekit/proto'))
+    PATH = Pathname.new(File.expand_path(__dir__ + '/proto'))
 
     def self.initialize_proto!
-      $LOAD_PATH.unshift(FOLDER)
-      FOLDER.children.sort.each { |proto_file| require proto_file }
+      $LOAD_PATH.unshift(PATH)
+      PATH.children.sort.each { |proto_file| require proto_file }
     end
   end
 end
