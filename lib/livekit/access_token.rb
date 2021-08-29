@@ -3,7 +3,7 @@
 require 'jwt'
 
 module Livekit
-  class Credentials
+  class AccessToken
     # 6 hours in seconds
     DEFAULT_TTL = 14_400
 
@@ -33,6 +33,14 @@ module Livekit
     end
 
     def to_jwt
+      payload = {
+        exp: Time.now.to_i + @ttl,
+        nbf: Time.now.to_i,
+        iss: @api_key,
+        sub: @identity
+      }
+      payload.merge!(@grants)
+      JWT.encode payload, @api_secret, 'HS256'
     end
   end
 end
