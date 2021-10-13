@@ -13,6 +13,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :creation_time, :int64, 5
       optional :turn_password, :string, 6
       repeated :enabled_codecs, :message, 7, "livekit.Codec"
+      optional :metadata, :string, 8
+      optional :num_participants, :uint32, 9
     end
     add_message "livekit.Codec" do
       optional :mime, :string, 1
@@ -41,36 +43,31 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :width, :uint32, 5
       optional :height, :uint32, 6
       optional :simulcast, :bool, 7
+      optional :disable_dtx, :bool, 8
     end
-    add_message "livekit.DataMessage" do
+    add_message "livekit.DataPacket" do
+      optional :kind, :enum, 1, "livekit.DataPacket.Kind"
       oneof :value do
-        optional :text, :string, 1
-        optional :binary, :bytes, 2
+        optional :user, :message, 2, "livekit.UserPacket"
+        optional :speaker, :message, 3, "livekit.ActiveSpeakerUpdate"
       end
     end
-    add_message "livekit.RecordingTemplate" do
-      optional :layout, :string, 1
-      optional :ws_url, :string, 2
-      optional :token, :string, 3
-      optional :room_name, :string, 4
+    add_enum "livekit.DataPacket.Kind" do
+      value :RELIABLE, 0
+      value :LOSSY, 1
     end
-    add_message "livekit.RecordingS3Output" do
-      optional :bucket, :string, 1
-      optional :key, :string, 2
-      optional :access_key, :string, 3
-      optional :secret, :string, 4
+    add_message "livekit.ActiveSpeakerUpdate" do
+      repeated :speakers, :message, 1, "livekit.SpeakerInfo"
     end
-    add_message "livekit.RecordingOptions" do
-      optional :preset, :string, 1
-      optional :input_width, :int32, 2
-      optional :input_height, :int32, 3
-      optional :output_width, :int32, 4
-      optional :output_height, :int32, 5
-      optional :depth, :int32, 6
-      optional :framerate, :int32, 7
-      optional :audio_bitrate, :int32, 8
-      optional :audio_frequency, :int32, 9
-      optional :video_bitrate, :int32, 10
+    add_message "livekit.SpeakerInfo" do
+      optional :sid, :string, 1
+      optional :level, :float, 2
+      optional :active, :bool, 3
+    end
+    add_message "livekit.UserPacket" do
+      optional :participant_sid, :string, 1
+      optional :payload, :bytes, 2
+      repeated :destination_sids, :string, 3
     end
     add_enum "livekit.TrackType" do
       value :AUDIO, 0
@@ -87,10 +84,11 @@ module Livekit
     ParticipantInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantInfo").msgclass
     ParticipantInfo::State = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantInfo.State").enummodule
     TrackInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackInfo").msgclass
-    DataMessage = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DataMessage").msgclass
-    RecordingTemplate = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RecordingTemplate").msgclass
-    RecordingS3Output = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RecordingS3Output").msgclass
-    RecordingOptions = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RecordingOptions").msgclass
+    DataPacket = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DataPacket").msgclass
+    DataPacket::Kind = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DataPacket.Kind").enummodule
+    ActiveSpeakerUpdate = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ActiveSpeakerUpdate").msgclass
+    SpeakerInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SpeakerInfo").msgclass
+    UserPacket = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.UserPacket").msgclass
     TrackType = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackType").enummodule
   end
 end
