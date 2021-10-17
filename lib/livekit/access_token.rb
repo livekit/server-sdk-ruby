@@ -4,8 +4,11 @@ require 'jwt'
 
 module Livekit
   class AccessToken
-    # 6 hours in seconds
+    # 6 hours in seconds; how long the access token to the server is good for
     DEFAULT_TTL = 14_400
+
+    # The signing algorithm used by the {jwt} gem internals
+    SIGNING_ALGORITHM = 'HS256'
 
     def initialize(api_key: nil, api_secret: nil, identity: nil, ttl: DEFAULT_TTL, metadata: nil)
       @api_key = api_key || ENV['LIVEKIT_API_KEY']
@@ -33,14 +36,16 @@ module Livekit
     end
 
     def to_jwt
+      jwt_timestamp = Time.now.to_i
       payload = {
-        exp: Time.now.to_i + @ttl,
-        nbf: Time.now.to_i,
+        exp: jwt_timestamp + @ttl,
+        nbf: jwt_timestamp,
         iss: @api_key,
         sub: @identity
       }
       payload.merge!(@grants)
-      JWT.encode payload, @api_secret, 'HS256'
+
+      JWT.encode(payload, @api_secret, SIGNING_ALGORITHM)
     end
   end
 end
