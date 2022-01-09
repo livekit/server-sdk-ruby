@@ -13,7 +13,6 @@ module LiveKit
       @api_secret = api_secret
     end
 
-    # creates a new room with name
     def create_room(name, empty_timeout: nil, max_participants: nil)
       self.rpc(
         :CreateRoom,
@@ -22,7 +21,6 @@ module LiveKit
       )
     end
 
-    # Lists rooms, when names is set, only list matching rooms
     def list_rooms(names: nil)
       self.rpc(
         :ListRooms,
