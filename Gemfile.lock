@@ -1,53 +1,66 @@
 PATH
   remote: .
   specs:
-    livekit-ruby (0.1.0)
+    livekit-server-sdk (0.2.0)
       jwt (~> 2.2.3)
-      twirp (~> 1.7.2)
+      twirp (~> 1.9.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    ast (2.4.2)
+    activesupport (6.1.4.4)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
     coderay (1.1.3)
+    concurrent-ruby (1.1.9)
     diff-lcs (1.4.4)
-    faraday (1.7.0)
+    faraday (1.9.3)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
-      faraday-httpclient (~> 1.0.1)
+      faraday-httpclient (~> 1.0)
+      faraday-multipart (~> 1.0)
       faraday-net_http (~> 1.0)
-      faraday-net_http_persistent (~> 1.1)
+      faraday-net_http_persistent (~> 1.0)
       faraday-patron (~> 1.0)
       faraday-rack (~> 1.0)
-      multipart-post (>= 1.2, < 3)
+      faraday-retry (~> 1.0)
       ruby2_keywords (>= 0.0.4)
     faraday-em_http (1.0.0)
     faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
+    faraday-multipart (1.0.3)
+      multipart-post (>= 1.2, < 3)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
-    google-protobuf (3.17.3)
-    google-protobuf (3.17.3-x86_64-linux)
+    faraday-retry (1.0.3)
+    google-protobuf (3.19.2)
+    google-protobuf (3.19.2-x86_64-linux)
+    i18n (1.8.11)
+      concurrent-ruby (~> 1.0)
     jwt (2.2.3)
     method_source (1.0.0)
+    middleware (0.1.0)
+    minitest (5.15.0)
     multipart-post (2.1.1)
-    parallel (1.20.1)
-    parser (3.0.2.0)
-      ast (~> 2.4.1)
+    protobuf (3.10.5)
+      activesupport (>= 3.2)
+      middleware
+      thor
+      thread_safe
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
     pry-doc (1.1.0)
       pry (~> 0.11)
       yard (~> 0.9.11)
-    rainbow (3.0.0)
     rake (13.0.6)
-    regexp_parser (2.1.1)
-    rexml (3.2.5)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -61,44 +74,30 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.2)
-    rubocop (1.19.0)
-      parallel (~> 1.10)
-      parser (>= 3.0.0.0)
-      rainbow (>= 2.2.2, < 4.0)
-      regexp_parser (>= 1.8, < 3.0)
-      rexml
-      rubocop-ast (>= 1.9.1, < 2.0)
-      ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.9.1)
-      parser (>= 3.0.1.1)
-    rubocop-rake (0.6.0)
-      rubocop (~> 1.0)
-    rubocop-rspec (2.4.0)
-      rubocop (~> 1.0)
-      rubocop-ast (>= 1.1.0)
-    ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
-    twirp (1.7.2)
+    thor (1.2.1)
+    thread_safe (0.3.6)
+    twirp (1.9.0)
       faraday (< 2)
       google-protobuf (~> 3.0, >= 3.7.0)
-    unicode-display_width (2.0.0)
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
     yard (0.9.26)
+    zeitwerk (2.5.3)
 
 PLATFORMS
   ruby
   x86_64-linux
 
 DEPENDENCIES
-  livekit-ruby!
+  livekit-server-sdk!
+  protobuf
   pry
   pry-doc
   rake
   rspec
-  rubocop
-  rubocop-rake
-  rubocop-rspec
+  twirp
   yard
 
 BUNDLED WITH
-   2.2.25
+   2.3.4
