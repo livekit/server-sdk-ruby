@@ -7,6 +7,5 @@ require "livekit/utils"
 require "livekit/version"
 
 # required since generated protobufs does use `require` instead of `require_relative`
-FOLDER = Pathname.new(File.expand_path("lib/livekit/proto"))
-$LOAD_PATH.unshift(FOLDER.to_s)
+$LOAD_PATH.unshift(File.expand_path("livekit/proto", __dir__))
 require "livekit/room_service_client"
