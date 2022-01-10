@@ -1,6 +1,6 @@
 # LiveKit Server API for Ruby
 
-Ruby API for server-side with LiveKit. This gem provides the ability to create access tokens as well as access RoomService.
+Ruby API for server-side integrations with LiveKit. This gem provides the ability to create access tokens as well as access RoomService.
 
 This library is designed to work with Ruby 2.6.0 and above.
 
@@ -39,9 +39,9 @@ token.add_grant(roomJoin: true, room: 'room-name')
 puts token.to_jwt
 ```
 
-By default, the token expires after 6 hours. you may override this by passing in `ttl` when creating the token. `ttl` is expressed in seconds.
+By default, a token expires after 6 hours. You may override this by passing in `ttl` when creating the token. `ttl` is expressed in seconds.
 
-### Permissions in Access Tokens
+### Setting Permissions with Access Tokens
 
 It's possible to customize the permissions of each participant. See more details at [access tokens guide](https://docs.livekit.io/guides/access-tokens#room-permissions).
 
