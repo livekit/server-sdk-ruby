@@ -15,6 +15,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :enabled_codecs, :message, 7, "livekit.Codec"
       optional :metadata, :string, 8
       optional :num_participants, :uint32, 9
+      optional :active_recording, :bool, 10
     end
     add_message "livekit.Codec" do
       optional :mime, :string, 1
@@ -28,6 +29,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :metadata, :string, 5
       optional :joined_at, :int64, 6
       optional :hidden, :bool, 7
+      optional :recorder, :bool, 8
+      optional :name, :string, 9
     end
     add_enum "livekit.ParticipantInfo.State" do
       value :JOINING, 0
@@ -44,6 +47,15 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :height, :uint32, 6
       optional :simulcast, :bool, 7
       optional :disable_dtx, :bool, 8
+      optional :source, :enum, 9, "livekit.TrackSource"
+      repeated :layers, :message, 10, "livekit.VideoLayer"
+      optional :mime_type, :string, 11
+    end
+    add_message "livekit.VideoLayer" do
+      optional :quality, :enum, 1, "livekit.VideoQuality"
+      optional :width, :uint32, 2
+      optional :height, :uint32, 3
+      optional :bitrate, :uint32, 4
     end
     add_message "livekit.DataPacket" do
       optional :kind, :enum, 1, "livekit.DataPacket.Kind"
@@ -69,26 +81,53 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :payload, :bytes, 2
       repeated :destination_sids, :string, 3
     end
+    add_message "livekit.ParticipantTracks" do
+      optional :participant_sid, :string, 1
+      repeated :track_sids, :string, 2
+    end
     add_enum "livekit.TrackType" do
       value :AUDIO, 0
       value :VIDEO, 1
       value :DATA, 2
     end
+    add_enum "livekit.TrackSource" do
+      value :UNKNOWN, 0
+      value :CAMERA, 1
+      value :MICROPHONE, 2
+      value :SCREEN_SHARE, 3
+      value :SCREEN_SHARE_AUDIO, 4
+    end
+    add_enum "livekit.VideoQuality" do
+      value :LOW, 0
+      value :MEDIUM, 1
+      value :HIGH, 2
+      value :OFF, 3
+    end
+    add_enum "livekit.ConnectionQuality" do
+      value :POOR, 0
+      value :GOOD, 1
+      value :EXCELLENT, 2
+    end
   end
 end
 
-module Livekit
+module LiveKit
   module Proto
     Room = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.Room").msgclass
     Codec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.Codec").msgclass
     ParticipantInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantInfo").msgclass
     ParticipantInfo::State = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantInfo.State").enummodule
     TrackInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackInfo").msgclass
+    VideoLayer = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoLayer").msgclass
     DataPacket = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DataPacket").msgclass
     DataPacket::Kind = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DataPacket.Kind").enummodule
     ActiveSpeakerUpdate = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ActiveSpeakerUpdate").msgclass
     SpeakerInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SpeakerInfo").msgclass
     UserPacket = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.UserPacket").msgclass
+    ParticipantTracks = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantTracks").msgclass
     TrackType = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackType").enummodule
+    TrackSource = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackSource").enummodule
+    VideoQuality = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoQuality").enummodule
+    ConnectionQuality = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ConnectionQuality").enummodule
   end
 end

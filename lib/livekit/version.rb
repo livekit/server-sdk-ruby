@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-module Livekit
-  VERSION = '0.1.0'
+module LiveKit
+  VERSION = "0.2.1"
 end

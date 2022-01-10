@@ -1,45 +1,81 @@
-[![Specs](https://github.com/livekit/server-sdk-ruby/actions/workflows/test.yml/badge.svg)](https://github.com/livekit/server-sdk-ruby/actions/workflows/test.yml)
+# LiveKit Server API for Ruby
 
-# Livekit::Ruby
+Ruby API for server-side integrations with LiveKit. This gem provides the ability to create access tokens as well as access RoomService.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/livekit/ruby`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This library is designed to work with Ruby 2.6.0 and above.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
+### Gemfile
+
 ```ruby
-gem 'livekit-ruby'
+gem 'livekit-server-sdk'
 ```
 
-And then execute:
+and then `bundle install`.
 
-    $ bundle install
+### Install system-wide
 
-Or install it yourself as:
-
-    $ gem install livekit-ruby
+```shell
+gem install livekit-server-sdk
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+### Creating Access Tokens
 
-## Development
+Creating a token for participant to join a room.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+require 'livekit'
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+token = LiveKit::AccessToken.new(api_key: 'yourkey', api_secret: 'yoursecret')
+token.identity = 'participant-identity'
+token.name = 'participant-name'
+token.add_grant(roomJoin: true, room: 'room-name')
 
-## Contributing
+puts token.to_jwt
+```
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/livekit-ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/livekit-ruby/blob/master/CODE_OF_CONDUCT.md).
+By default, a token expires after 6 hours. You may override this by passing in `ttl` when creating the token. `ttl` is expressed in seconds.
+
+### Setting Permissions with Access Tokens
+
+It's possible to customize the permissions of each participant. See more details at [access tokens guide](https://docs.livekit.io/guides/access-tokens#room-permissions).
+
+### Room Service
+
+`RoomServiceClient` is a Twirp-based client that provides management APIs to LiveKit. You can connect it to your LiveKit endpoint. See [service apis](https://docs.livekit.io/guides/server-api) for a list of available APIs.
+
+```ruby
+require 'livekit'
+
+client = LiveKit::RoomServiceClient.new('https://my.livekit.instance',
+    api_key: 'yourkey', api_secret: 'yoursecret')
+
+name = 'myroom'
+
+client.list_rooms
+
+client.list_participants(room: name)
+
+client.mute_published_track(room: name, identity: 'participant',
+                            track_sid: 'track-id', muted: true)
+
+client.remove_participant(room: name, identity: 'participant')
+
+client.delete_room(room: name)
+```
+
+### Environment Variables
+
+You may store credentials in environment variables. If api-key or api-secret is not passed in when creating a `RoomServiceClient` or `AccessToken`, the values in the following env vars will be used:
+
+- `LIVEKIT_API_KEY`
+- `LIVEKIT_API_SECRET`
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Livekit::Ruby project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/livekit-ruby/blob/master/CODE_OF_CONDUCT.md).

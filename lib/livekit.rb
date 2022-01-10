@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
-require 'livekit/version'
-require 'livekit/access_token'
+require "livekit/access_token"
+require "livekit/grants"
+require "livekit/token_verifier"
+require "livekit/utils"
+require "livekit/version"
 
-module Livekit
-  autoload(:Proto, File.expand_path('livekit/proto.rb', __dir__))
-end
+# required since generated protobufs does use `require` instead of `require_relative`
+$LOAD_PATH.unshift(File.expand_path("livekit/proto", __dir__))
+require "livekit/room_service_client"

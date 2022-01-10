@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe Livekit do
+RSpec.describe LiveKit do
   it 'has a version number' do
-    expect(Livekit::VERSION).not_to be nil
+    expect(LiveKit::VERSION).not_to be nil
   end
 end
