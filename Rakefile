@@ -12,8 +12,8 @@ task :proto do
          "--ruby_out=lib/livekit/proto",
          "--twirp_ruby_out=lib/livekit/proto",
          "-Iprotocol",
+         "./protocol/livekit_egress.proto",
          "./protocol/livekit_models.proto",
-         "./protocol/livekit_recording.proto",
          "./protocol/livekit_room.proto",
          "./protocol/livekit_webhook.proto")
 end

@@ -4,6 +4,7 @@
 require 'google/protobuf'
 
 require 'livekit_models_pb'
+require 'livekit_egress_pb'
 require 'livekit_recording_pb'
 
 Google::Protobuf::DescriptorPool.generated_pool.build do
@@ -13,6 +14,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :room, :message, 2, "livekit.Room"
       optional :participant, :message, 3, "livekit.ParticipantInfo"
       optional :recording_info, :message, 5, "livekit.RecordingInfo"
+      optional :egress_info, :message, 9, "livekit.EgressInfo"
+      optional :track, :message, 8, "livekit.TrackInfo"
       optional :id, :string, 6
       optional :created_at, :int64, 7
     end

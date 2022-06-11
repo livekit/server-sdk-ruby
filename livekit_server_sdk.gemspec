@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "LiveKit Server SDK for Ruby"
   spec.homepage = "https://livekit.io"
-  spec.license = "MIT"
+  spec.license = "Apache-2.0"
   spec.required_ruby_version = ">= 2.6.0"
 
   # spec.metadata["homepage_uri"] = spec.homepage
@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "google-protobuf", "~> 3.19.2"
+  spec.add_dependency "google-protobuf", "~> 3.21.0"
   spec.add_dependency "jwt", "~> 2.2.3"
   spec.add_dependency "twirp", "~> 1.9.0"
 

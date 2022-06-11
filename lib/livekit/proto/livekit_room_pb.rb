@@ -46,11 +46,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.MuteRoomTrackResponse" do
       optional :track, :message, 1, "livekit.TrackInfo"
     end
-    add_message "livekit.ParticipantPermission" do
-      optional :can_subscribe, :bool, 1
-      optional :can_publish, :bool, 2
-      optional :can_publish_data, :bool, 3
-    end
     add_message "livekit.UpdateParticipantRequest" do
       optional :room, :string, 1
       optional :identity, :string, 2
@@ -94,7 +89,6 @@ module LiveKit
     RemoveParticipantResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RemoveParticipantResponse").msgclass
     MuteRoomTrackRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.MuteRoomTrackRequest").msgclass
     MuteRoomTrackResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.MuteRoomTrackResponse").msgclass
-    ParticipantPermission = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantPermission").msgclass
     UpdateParticipantRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.UpdateParticipantRequest").msgclass
     UpdateSubscriptionsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.UpdateSubscriptionsRequest").msgclass
     UpdateSubscriptionsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.UpdateSubscriptionsResponse").msgclass

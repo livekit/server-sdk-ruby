@@ -69,6 +69,49 @@ client.remove_participant(room: name, identity: 'participant')
 client.delete_room(room: name)
 ```
 
+### Egress Service
+
+`EgressServiceClient` is a ruby client to EgressService. Refer to [docs](https://docs.livekit.io/guides/egress) for more usage examples
+
+```ruby
+require 'livekit'
+
+# starting a room composite to S3
+const egressClient = LiveKit::EgressServiceClient.new(
+    "https://your-url",
+    api_key: 'key',
+    api_secret: 'secret'
+);
+
+info = egressClient.start_room_composite_egress(
+    'room-name',
+    LiveKit::Proto::EncodedFileOutput.new(
+        file_type:
+        filepath: "dz-test-recording.mp4",
+        s3: LiveKit::Proto::S3Upload.new(
+            access_key: 'access-key',
+            secret: 'secret',
+            region: 'bucket-region',
+            bucket: 'bucket'
+        )
+    )
+)
+puts info
+
+# starting a track composite to RTMP
+urls = Google::Protobuf::RepeatedField.new(:string, ['rtmp://url1', 'rtmps://url2'])
+info = egressClient.start_track_composite_egress(
+    'room-name',
+    LiveKit::Proto::StreamOutput.new(
+        protocol: LiveKit::Proto::StreamProtocol::RTMP,
+        urls: urls
+    ),
+    audio_track_id: 'TR_XXXXXXXXXXXX',
+    video_track_id: 'TR_XXXXXXXXXXXX'
+)
+puts info
+```
+
 ### Environment Variables
 
 You may store credentials in environment variables. If api-key or api-secret is not passed in when creating a `RoomServiceClient` or `AccessToken`, the values in the following env vars will be used:
@@ -78,4 +121,4 @@ You may store credentials in environment variables. If api-key or api-secret is 
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of Apache 2.0 License.
