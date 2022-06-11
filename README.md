@@ -86,8 +86,8 @@ const egressClient = LiveKit::EgressServiceClient.new(
 info = egressClient.start_room_composite_egress(
     'room-name',
     LiveKit::Proto::EncodedFileOutput.new(
-        file_type:
-        filepath: "dz-test-recording.mp4",
+        file_type: LiveKit::Proto::EncodedFileType::MP4,
+        filepath: "my-recording.mp4",
         s3: LiveKit::Proto::S3Upload.new(
             access_key: 'access-key',
             secret: 'secret',
