@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    livekit-server-sdk (0.2.2)
+    livekit-server-sdk (0.3.0)
       google-protobuf (~> 3.21.0)
       jwt (~> 2.2.3)
       twirp (~> 1.9.0)
@@ -35,7 +35,6 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     google-protobuf (3.21.1)
-    google-protobuf (3.21.1-x86_64-linux)
     jwt (2.2.3)
     method_source (1.0.0)
     multipart-post (2.2.3)

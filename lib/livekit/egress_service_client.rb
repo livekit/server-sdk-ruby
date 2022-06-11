@@ -111,7 +111,7 @@ module LiveKit
 
     def update_stream(egress_id,
       add_output_urls: [],
-      remove_output_urls: [],
+      remove_output_urls: []
     )
       self.rpc(
         :UpdateStream,
