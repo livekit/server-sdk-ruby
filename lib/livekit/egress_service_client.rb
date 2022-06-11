@@ -26,9 +26,9 @@ module LiveKit
       # egress layout
       layout: nil,
       # true to record only audio
-      audio_only: nil,
+      audio_only: false,
       # true to record only video
-      video_only: nil
+      video_only: false
     )
       request = Proto::RoomCompositeEgressRequest.new(
         room_name: room_name,
@@ -36,8 +36,8 @@ module LiveKit
         advanced: advanced,
         layout: layout,
         custom_base_url: custom_base_url,
-        audio_only: audio_only.nil? ? false : audio_only,
-        video_only: video_only.nil? ? false : video_only,
+        audio_only: audio_only,
+        video_only: video_only,
       )
       self.set_output(request, output)
       self.rpc(
