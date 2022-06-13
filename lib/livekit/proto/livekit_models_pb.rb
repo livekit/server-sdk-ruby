@@ -129,9 +129,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :video, :message, 1, "livekit.VideoConfiguration"
       optional :screen, :message, 2, "livekit.VideoConfiguration"
       optional :resume_connection, :enum, 3, "livekit.ClientConfigSetting"
+      optional :disabled_codecs, :message, 4, "livekit.DisabledCodecs"
     end
     add_message "livekit.VideoConfiguration" do
       optional :hardware_encoder, :enum, 1, "livekit.ClientConfigSetting"
+    end
+    add_message "livekit.DisabledCodecs" do
+      repeated :codecs, :message, 1, "livekit.Codec"
     end
     add_message "livekit.RTPStats" do
       optional :start_time, :message, 1, "google.protobuf.Timestamp"
@@ -224,6 +228,7 @@ module LiveKit
     ClientInfo::SDK = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ClientInfo.SDK").enummodule
     ClientConfiguration = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ClientConfiguration").msgclass
     VideoConfiguration = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoConfiguration").msgclass
+    DisabledCodecs = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DisabledCodecs").msgclass
     RTPStats = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RTPStats").msgclass
     TrackType = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackType").enummodule
     TrackSource = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackSource").enummodule
