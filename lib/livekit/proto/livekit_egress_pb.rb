@@ -14,6 +14,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       oneof :output do
         optional :file, :message, 6, "livekit.EncodedFileOutput"
         optional :stream, :message, 7, "livekit.StreamOutput"
+        optional :segments, :message, 10, "livekit.SegmentedFileOutput"
       end
       oneof :options do
         optional :preset, :enum, 8, "livekit.EncodingOptionsPreset"
@@ -27,6 +28,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       oneof :output do
         optional :file, :message, 4, "livekit.EncodedFileOutput"
         optional :stream, :message, 5, "livekit.StreamOutput"
+        optional :segments, :message, 8, "livekit.SegmentedFileOutput"
       end
       oneof :options do
         optional :preset, :enum, 6, "livekit.EncodingOptionsPreset"
@@ -48,6 +50,17 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
         optional :s3, :message, 3, "livekit.S3Upload"
         optional :gcp, :message, 4, "livekit.GCPUpload"
         optional :azure, :message, 5, "livekit.AzureBlobUpload"
+      end
+    end
+    add_message "livekit.SegmentedFileOutput" do
+      optional :protocol, :enum, 1, "livekit.SegmentedFileProtocol"
+      optional :filename_prefix, :string, 2
+      optional :playlist_name, :string, 3
+      optional :segment_duration, :uint32, 4
+      oneof :output do
+        optional :s3, :message, 5, "livekit.S3Upload"
+        optional :gcp, :message, 6, "livekit.GCPUpload"
+        optional :azure, :message, 7, "livekit.AzureBlobUpload"
       end
     end
     add_message "livekit.DirectFileOutput" do
@@ -122,6 +135,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       oneof :result do
         optional :stream, :message, 7, "livekit.StreamInfoList"
         optional :file, :message, 8, "livekit.FileInfo"
+        optional :segments, :message, 12, "livekit.SegmentsInfo"
       end
     end
     add_message "livekit.StreamInfoList" do
@@ -137,6 +151,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :size, :int64, 4
       optional :location, :string, 5
     end
+    add_message "livekit.SegmentsInfo" do
+      optional :playlist_name, :string, 1
+      optional :duration, :int64, 2
+      optional :size, :int64, 3
+      optional :playlist_location, :string, 4
+      optional :segment_count, :int64, 5
+    end
     add_enum "livekit.EncodedFileType" do
       value :DEFAULT_FILETYPE, 0
       value :MP4, 1
@@ -145,6 +166,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_enum "livekit.StreamProtocol" do
       value :DEFAULT_PROTOCOL, 0
       value :RTMP, 1
+    end
+    add_enum "livekit.SegmentedFileProtocol" do
+      value :DEFAULT_SEGMENTED_FILE_PROTOCOL, 0
+      value :HLS_PROTOCOL, 1
     end
     add_enum "livekit.AudioCodec" do
       value :DEFAULT_AC, 0
@@ -168,6 +193,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :EGRESS_ACTIVE, 1
       value :EGRESS_ENDING, 2
       value :EGRESS_COMPLETE, 3
+      value :EGRESS_FAILED, 4
+      value :EGRESS_ABORTED, 5
     end
   end
 end
@@ -178,6 +205,7 @@ module LiveKit
     TrackCompositeEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackCompositeEgressRequest").msgclass
     TrackEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackEgressRequest").msgclass
     EncodedFileOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodedFileOutput").msgclass
+    SegmentedFileOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentedFileOutput").msgclass
     DirectFileOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DirectFileOutput").msgclass
     S3Upload = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.S3Upload").msgclass
     GCPUpload = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.GCPUpload").msgclass
@@ -193,8 +221,10 @@ module LiveKit
     StreamInfoList = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamInfoList").msgclass
     StreamInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamInfo").msgclass
     FileInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.FileInfo").msgclass
+    SegmentsInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentsInfo").msgclass
     EncodedFileType = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodedFileType").enummodule
     StreamProtocol = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamProtocol").enummodule
+    SegmentedFileProtocol = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentedFileProtocol").enummodule
     AudioCodec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.AudioCodec").enummodule
     VideoCodec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoCodec").enummodule
     EncodingOptionsPreset = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodingOptionsPreset").enummodule
