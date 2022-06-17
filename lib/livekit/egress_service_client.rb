@@ -93,7 +93,7 @@ module LiveKit
       self.rpc(
         :StartTrackEgress,
         request,
-        headers: auth_header(roomRecord: true),
+        headers: auth_header(roomRecord: true, recorder: true),
       )
     end
 
