@@ -150,7 +150,7 @@ module LiveKit
       end
       if output.filepath
         request.file = output
-      else if output.filename_prefix
+      elsif output.filename_prefix
         request.segments = output
       else
         request.stream = output
