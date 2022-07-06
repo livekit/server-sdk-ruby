@@ -148,9 +148,9 @@ module LiveKit
       if output.nil?
         raise "output cannot be nil"
       end
-      if output.filepath
+      if output.is_a? LiveKit::Proto::EncodedFileOutput or output.is_a? LiveKit::Proto::DirectFileOutput
         request.file = output
-      elsif output.filename_prefix
+      elsif output.is_a? LiveKit::Proto::SegmentedFileOutput
         request.segments = output
       else
         request.stream = output
