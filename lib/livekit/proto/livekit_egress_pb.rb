@@ -11,7 +11,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :audio_only, :bool, 3
       optional :video_only, :bool, 4
       optional :custom_base_url, :string, 5
-      optional :disable_manifest, :bool, 11
       oneof :output do
         optional :file, :message, 6, "livekit.EncodedFileOutput"
         optional :stream, :message, 7, "livekit.StreamOutput"
@@ -26,7 +25,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :room_name, :string, 1
       optional :audio_track_id, :string, 2
       optional :video_track_id, :string, 3
-      optional :disable_manifest, :bool, 9
       oneof :output do
         optional :file, :message, 4, "livekit.EncodedFileOutput"
         optional :stream, :message, 5, "livekit.StreamOutput"
@@ -40,7 +38,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.TrackEgressRequest" do
       optional :room_name, :string, 1
       optional :track_id, :string, 2
-      optional :disable_manifest, :bool, 5
       oneof :output do
         optional :file, :message, 3, "livekit.DirectFileOutput"
         optional :websocket_url, :string, 4
@@ -49,6 +46,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.EncodedFileOutput" do
       optional :file_type, :enum, 1, "livekit.EncodedFileType"
       optional :filepath, :string, 2
+      optional :disable_manifest, :bool, 6
       oneof :output do
         optional :s3, :message, 3, "livekit.S3Upload"
         optional :gcp, :message, 4, "livekit.GCPUpload"
@@ -60,6 +58,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :filename_prefix, :string, 2
       optional :playlist_name, :string, 3
       optional :segment_duration, :uint32, 4
+      optional :disable_manifest, :bool, 8
       oneof :output do
         optional :s3, :message, 5, "livekit.S3Upload"
         optional :gcp, :message, 6, "livekit.GCPUpload"
@@ -68,6 +67,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "livekit.DirectFileOutput" do
       optional :filepath, :string, 1
+      optional :disable_manifest, :bool, 5
       oneof :output do
         optional :s3, :message, 2, "livekit.S3Upload"
         optional :gcp, :message, 3, "livekit.GCPUpload"

@@ -28,9 +28,7 @@ module LiveKit
       # true to record only audio
       audio_only: false,
       # true to record only video
-      video_only: false,
-      # disable upload of json manifest file
-      disable_manifest: false
+      video_only: false
     )
       request = Proto::RoomCompositeEgressRequest.new(
         room_name: room_name,
@@ -40,7 +38,6 @@ module LiveKit
         custom_base_url: custom_base_url,
         audio_only: audio_only,
         video_only: video_only,
-        disable_manifest: disable_manifest,
       )
       self.set_output(request, output)
       self.rpc(
@@ -61,9 +58,7 @@ module LiveKit
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
       # EncodingOptions, only one of preset or advanced could be set
-      advanced: nil,
-      # disable upload of json manifest file
-      disable_manifest: false
+      advanced: nil
     )
       request = Proto::TrackCompositeEgressRequest.new(
         room_name: room_name,
@@ -71,7 +66,6 @@ module LiveKit
         advanced: advanced,
         audio_track_id: audio_track_id,
         video_track_id: video_track_id,
-        disable_manifest: disable_manifest,
       )
       self.set_output(request, output)
       self.rpc(
@@ -85,14 +79,11 @@ module LiveKit
       room_name,
       # either a DirectFileOutput - egress to storage or string - egress to WebSocket URL
       output,
-      track_id,
-      # disable upload of json manifest file
-      disable_manifest: false
+      track_id
     )
       request = Proto::TrackEgressRequest.new(
         room_name: room_name,
         track_id: track_id,
-        disable_manifest: disable_manifest,
       )
       if output.filepath
         request.file = output
