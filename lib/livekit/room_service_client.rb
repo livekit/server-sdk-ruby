@@ -87,13 +87,16 @@ module LiveKit
       )
     end
 
-    def update_participant(room:, identity:, metadata: nil, permission: nil)
+    def update_participant(room:, identity:, metadata: nil, permission: nil, name: nil)
       req = Proto::UpdateParticipantRequest.new(room: room, identity: identity)
       if metadata
         req.metadata = metadata
       end
       if permission
         req.permission = permission
+      end
+      if name
+        req.name = name
       end
       self.rpc(
         :UpdateParticipant,
