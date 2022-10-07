@@ -13,10 +13,15 @@ module LiveKit
       @api_secret = api_secret
     end
 
-    def create_room(name, empty_timeout: nil, max_participants: nil)
+    def create_room(name, empty_timeout: nil, max_participants: nil, egress: nil)
       self.rpc(
         :CreateRoom,
-        Proto::CreateRoomRequest.new(name: name, empty_timeout: empty_timeout, max_participants: max_participants),
+        Proto::CreateRoomRequest.new(
+          name: name,
+          empty_timeout: empty_timeout,
+          max_participants: max_participants,
+          egress: egress,
+        ),
         headers: auth_header(roomCreate: true),
       )
     end
