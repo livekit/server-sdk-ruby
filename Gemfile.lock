@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    livekit-server-sdk (0.3.0)
+    livekit-server-sdk (0.3.1)
       google-protobuf (~> 3.21.0)
       jwt (~> 2.2.3)
       twirp (~> 1.9.0)
@@ -79,4 +79,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   2.3.4
+   2.3.15

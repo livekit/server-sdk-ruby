@@ -105,6 +105,18 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :participant_sid, :string, 1
       repeated :track_sids, :string, 2
     end
+    add_message "livekit.ServerInfo" do
+      optional :edition, :enum, 1, "livekit.ServerInfo.Edition"
+      optional :version, :string, 2
+      optional :protocol, :int32, 3
+      optional :region, :string, 4
+      optional :node_id, :string, 5
+      optional :debug_info, :string, 6
+    end
+    add_enum "livekit.ServerInfo.Edition" do
+      value :Standard, 0
+      value :Cloud, 1
+    end
     add_message "livekit.ClientInfo" do
       optional :sdk, :enum, 1, "livekit.ClientInfo.SDK"
       optional :version, :string, 2
@@ -115,6 +127,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :browser, :string, 7
       optional :browser_version, :string, 8
       optional :address, :string, 9
+      optional :network, :string, 10
     end
     add_enum "livekit.ClientInfo.SDK" do
       value :UNKNOWN, 0
@@ -130,6 +143,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :screen, :message, 2, "livekit.VideoConfiguration"
       optional :resume_connection, :enum, 3, "livekit.ClientConfigSetting"
       optional :disabled_codecs, :message, 4, "livekit.DisabledCodecs"
+      optional :force_relay, :enum, 5, "livekit.ClientConfigSetting"
     end
     add_message "livekit.VideoConfiguration" do
       optional :hardware_encoder, :enum, 1, "livekit.ClientConfigSetting"
@@ -144,6 +158,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :packets, :uint32, 4
       optional :packet_rate, :double, 5
       optional :bytes, :uint64, 6
+      optional :header_bytes, :uint64, 39
       optional :bitrate, :double, 7
       optional :packets_lost, :uint32, 8
       optional :packet_loss_rate, :double, 9
@@ -151,10 +166,12 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :packets_duplicate, :uint32, 11
       optional :packet_duplicate_rate, :double, 12
       optional :bytes_duplicate, :uint64, 13
+      optional :header_bytes_duplicate, :uint64, 40
       optional :bitrate_duplicate, :double, 14
       optional :packets_padding, :uint32, 15
       optional :packet_padding_rate, :double, 16
       optional :bytes_padding, :uint64, 17
+      optional :header_bytes_padding, :uint64, 41
       optional :bitrate_padding, :double, 18
       optional :packets_out_of_order, :uint32, 19
       optional :frames, :uint32, 20
@@ -176,6 +193,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :last_key_frame, :message, 34, "google.protobuf.Timestamp"
       optional :layer_lock_plis, :uint32, 35
       optional :last_layer_lock_pli, :message, 36, "google.protobuf.Timestamp"
+    end
+    add_message "livekit.TimedVersion" do
+      optional :unix_micro, :int64, 1
+      optional :ticks, :int32, 2
     end
     add_enum "livekit.TrackType" do
       value :AUDIO, 0
@@ -205,6 +226,16 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :DISABLED, 1
       value :ENABLED, 2
     end
+    add_enum "livekit.DisconnectReason" do
+      value :UNKNOWN_REASON, 0
+      value :CLIENT_INITIATED, 1
+      value :DUPLICATE_IDENTITY, 2
+      value :SERVER_SHUTDOWN, 3
+      value :PARTICIPANT_REMOVED, 4
+      value :ROOM_DELETED, 5
+      value :STATE_MISMATCH, 6
+      value :JOIN_FAILURE, 7
+    end
   end
 end
 
@@ -224,16 +255,20 @@ module LiveKit
     SpeakerInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SpeakerInfo").msgclass
     UserPacket = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.UserPacket").msgclass
     ParticipantTracks = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantTracks").msgclass
+    ServerInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ServerInfo").msgclass
+    ServerInfo::Edition = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ServerInfo.Edition").enummodule
     ClientInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ClientInfo").msgclass
     ClientInfo::SDK = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ClientInfo.SDK").enummodule
     ClientConfiguration = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ClientConfiguration").msgclass
     VideoConfiguration = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoConfiguration").msgclass
     DisabledCodecs = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DisabledCodecs").msgclass
     RTPStats = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RTPStats").msgclass
+    TimedVersion = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TimedVersion").msgclass
     TrackType = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackType").enummodule
     TrackSource = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackSource").enummodule
     VideoQuality = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoQuality").enummodule
     ConnectionQuality = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ConnectionQuality").enummodule
     ClientConfigSetting = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ClientConfigSetting").enummodule
+    DisconnectReason = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DisconnectReason").enummodule
   end
 end
