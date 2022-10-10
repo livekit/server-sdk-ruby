@@ -46,6 +46,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.EncodedFileOutput" do
       optional :file_type, :enum, 1, "livekit.EncodedFileType"
       optional :filepath, :string, 2
+      optional :disable_manifest, :bool, 6
       oneof :output do
         optional :s3, :message, 3, "livekit.S3Upload"
         optional :gcp, :message, 4, "livekit.GCPUpload"
@@ -57,6 +58,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :filename_prefix, :string, 2
       optional :playlist_name, :string, 3
       optional :segment_duration, :uint32, 4
+      optional :disable_manifest, :bool, 8
       oneof :output do
         optional :s3, :message, 5, "livekit.S3Upload"
         optional :gcp, :message, 6, "livekit.GCPUpload"
@@ -65,6 +67,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "livekit.DirectFileOutput" do
       optional :filepath, :string, 1
+      optional :disable_manifest, :bool, 5
       oneof :output do
         optional :s3, :message, 2, "livekit.S3Upload"
         optional :gcp, :message, 3, "livekit.GCPUpload"
@@ -123,6 +126,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.EgressInfo" do
       optional :egress_id, :string, 1
       optional :room_id, :string, 2
+      optional :room_name, :string, 13
       optional :status, :enum, 3, "livekit.EgressStatus"
       optional :started_at, :int64, 10
       optional :ended_at, :int64, 11
@@ -143,7 +147,15 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "livekit.StreamInfo" do
       optional :url, :string, 1
+      optional :started_at, :int64, 2
+      optional :ended_at, :int64, 3
       optional :duration, :int64, 4
+      optional :status, :enum, 5, "livekit.StreamInfo.Status"
+    end
+    add_enum "livekit.StreamInfo.Status" do
+      value :ACTIVE, 0
+      value :FINISHED, 1
+      value :FAILED, 2
     end
     add_message "livekit.FileInfo" do
       optional :filename, :string, 1
@@ -157,6 +169,15 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :size, :int64, 3
       optional :playlist_location, :string, 4
       optional :segment_count, :int64, 5
+    end
+    add_message "livekit.AutoTrackEgress" do
+      optional :filepath, :string, 1
+      optional :disable_manifest, :bool, 5
+      oneof :output do
+        optional :s3, :message, 2, "livekit.S3Upload"
+        optional :gcp, :message, 3, "livekit.GCPUpload"
+        optional :azure, :message, 4, "livekit.AzureBlobUpload"
+      end
     end
     add_enum "livekit.EncodedFileType" do
       value :DEFAULT_FILETYPE, 0
@@ -187,6 +208,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :H264_720P_60, 1
       value :H264_1080P_30, 2
       value :H264_1080P_60, 3
+      value :PORTRAIT_H264_720P_30, 4
+      value :PORTRAIT_H264_720P_60, 5
+      value :PORTRAIT_H264_1080P_30, 6
+      value :PORTRAIT_H264_1080P_60, 7
     end
     add_enum "livekit.EgressStatus" do
       value :EGRESS_STARTING, 0
@@ -195,6 +220,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :EGRESS_COMPLETE, 3
       value :EGRESS_FAILED, 4
       value :EGRESS_ABORTED, 5
+      value :EGRESS_LIMIT_REACHED, 6
     end
   end
 end
@@ -220,8 +246,10 @@ module LiveKit
     EgressInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EgressInfo").msgclass
     StreamInfoList = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamInfoList").msgclass
     StreamInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamInfo").msgclass
+    StreamInfo::Status = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamInfo.Status").enummodule
     FileInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.FileInfo").msgclass
     SegmentsInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentsInfo").msgclass
+    AutoTrackEgress = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.AutoTrackEgress").msgclass
     EncodedFileType = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodedFileType").enummodule
     StreamProtocol = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamProtocol").enummodule
     SegmentedFileProtocol = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentedFileProtocol").enummodule

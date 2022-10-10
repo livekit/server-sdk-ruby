@@ -4,6 +4,7 @@
 require 'google/protobuf'
 
 require 'livekit_models_pb'
+require 'livekit_egress_pb'
 
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("livekit_room.proto", :syntax => :proto3) do
@@ -13,6 +14,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :max_participants, :uint32, 3
       optional :node_id, :string, 4
       optional :metadata, :string, 5
+      optional :egress, :message, 6, "livekit.RoomEgress"
+    end
+    add_message "livekit.RoomEgress" do
+      optional :room, :message, 1, "livekit.RoomCompositeEgressRequest"
+      optional :tracks, :message, 2, "livekit.AutoTrackEgress"
     end
     add_message "livekit.ListRoomsRequest" do
       repeated :names, :string, 1
@@ -51,6 +57,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :identity, :string, 2
       optional :metadata, :string, 3
       optional :permission, :message, 4, "livekit.ParticipantPermission"
+      optional :name, :string, 5
     end
     add_message "livekit.UpdateSubscriptionsRequest" do
       optional :room, :string, 1
@@ -79,6 +86,7 @@ end
 module LiveKit
   module Proto
     CreateRoomRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.CreateRoomRequest").msgclass
+    RoomEgress = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RoomEgress").msgclass
     ListRoomsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ListRoomsRequest").msgclass
     ListRoomsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ListRoomsResponse").msgclass
     DeleteRoomRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DeleteRoomRequest").msgclass
