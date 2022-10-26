@@ -69,6 +69,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :mime_type, :string, 11
       optional :mid, :string, 12
       repeated :codecs, :message, 13, "livekit.SimulcastCodecInfo"
+      optional :stereo, :bool, 14
+      optional :disable_red, :bool, 15
     end
     add_message "livekit.VideoLayer" do
       optional :quality, :enum, 1, "livekit.VideoQuality"

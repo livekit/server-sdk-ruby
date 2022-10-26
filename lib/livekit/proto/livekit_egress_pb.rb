@@ -43,6 +43,20 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
         optional :websocket_url, :string, 4
       end
     end
+    add_message "livekit.WebEgressRequest" do
+      optional :url, :string, 1
+      optional :audio_only, :bool, 2
+      optional :video_only, :bool, 3
+      oneof :output do
+        optional :file, :message, 4, "livekit.EncodedFileOutput"
+        optional :stream, :message, 5, "livekit.StreamOutput"
+        optional :segments, :message, 6, "livekit.SegmentedFileOutput"
+      end
+      oneof :options do
+        optional :preset, :enum, 7, "livekit.EncodingOptionsPreset"
+        optional :advanced, :message, 8, "livekit.EncodingOptions"
+      end
+    end
     add_message "livekit.EncodedFileOutput" do
       optional :file_type, :enum, 1, "livekit.EncodedFileType"
       optional :filepath, :string, 2
@@ -51,6 +65,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
         optional :s3, :message, 3, "livekit.S3Upload"
         optional :gcp, :message, 4, "livekit.GCPUpload"
         optional :azure, :message, 5, "livekit.AzureBlobUpload"
+        optional :aliOSS, :message, 7, "livekit.AliOSSUpload"
       end
     end
     add_message "livekit.SegmentedFileOutput" do
@@ -63,6 +78,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
         optional :s3, :message, 5, "livekit.S3Upload"
         optional :gcp, :message, 6, "livekit.GCPUpload"
         optional :azure, :message, 7, "livekit.AzureBlobUpload"
+        optional :aliOSS, :message, 9, "livekit.AliOSSUpload"
       end
     end
     add_message "livekit.DirectFileOutput" do
@@ -72,6 +88,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
         optional :s3, :message, 2, "livekit.S3Upload"
         optional :gcp, :message, 3, "livekit.GCPUpload"
         optional :azure, :message, 4, "livekit.AzureBlobUpload"
+        optional :aliOSS, :message, 6, "livekit.AliOSSUpload"
       end
     end
     add_message "livekit.S3Upload" do
@@ -80,6 +97,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :region, :string, 3
       optional :endpoint, :string, 4
       optional :bucket, :string, 5
+      optional :force_path_style, :bool, 6
+      map :metadata, :string, :string, 7
+      optional :tagging, :string, 8
     end
     add_message "livekit.GCPUpload" do
       optional :credentials, :bytes, 1
@@ -89,6 +109,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :account_name, :string, 1
       optional :account_key, :string, 2
       optional :container_name, :string, 3
+    end
+    add_message "livekit.AliOSSUpload" do
+      optional :access_key, :string, 1
+      optional :secret, :string, 2
+      optional :region, :string, 3
+      optional :endpoint, :string, 4
+      optional :bucket, :string, 5
     end
     add_message "livekit.StreamOutput" do
       optional :protocol, :enum, 1, "livekit.StreamProtocol"
@@ -135,6 +162,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
         optional :room_composite, :message, 4, "livekit.RoomCompositeEgressRequest"
         optional :track_composite, :message, 5, "livekit.TrackCompositeEgressRequest"
         optional :track, :message, 6, "livekit.TrackEgressRequest"
+        optional :web, :message, 14, "livekit.WebEgressRequest"
       end
       oneof :result do
         optional :stream, :message, 7, "livekit.StreamInfoList"
@@ -159,6 +187,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "livekit.FileInfo" do
       optional :filename, :string, 1
+      optional :started_at, :int64, 2
+      optional :ended_at, :int64, 3
       optional :duration, :int64, 6
       optional :size, :int64, 4
       optional :location, :string, 5
@@ -169,6 +199,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :size, :int64, 3
       optional :playlist_location, :string, 4
       optional :segment_count, :int64, 5
+      optional :started_at, :int64, 6
+      optional :ended_at, :int64, 7
     end
     add_message "livekit.AutoTrackEgress" do
       optional :filepath, :string, 1
@@ -230,12 +262,14 @@ module LiveKit
     RoomCompositeEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RoomCompositeEgressRequest").msgclass
     TrackCompositeEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackCompositeEgressRequest").msgclass
     TrackEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackEgressRequest").msgclass
+    WebEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.WebEgressRequest").msgclass
     EncodedFileOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodedFileOutput").msgclass
     SegmentedFileOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentedFileOutput").msgclass
     DirectFileOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DirectFileOutput").msgclass
     S3Upload = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.S3Upload").msgclass
     GCPUpload = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.GCPUpload").msgclass
     AzureBlobUpload = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.AzureBlobUpload").msgclass
+    AliOSSUpload = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.AliOSSUpload").msgclass
     StreamOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamOutput").msgclass
     EncodingOptions = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodingOptions").msgclass
     UpdateLayoutRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.UpdateLayoutRequest").msgclass

@@ -97,6 +97,33 @@ module LiveKit
       )
     end
 
+    def start_web_egress(
+      url,
+      # one of EncodedFileOutput, SegmentedFileOutput or StreamOutput
+      output,
+      # EncodingOptionsPreset, only one of preset or advanced could be set
+      preset: nil,
+      # EncodingOptions, only one of preset or advanced could be set
+      advanced: nil,
+      # true to record only audio
+      audio_only: false,
+      # true to record only video
+      video_only: false
+    )
+      request = Proto::WebEgressRequest.new(
+        url: url,
+        preset: preset,
+        advanced: advanced,
+        audio_only: audio_only,
+        video_only: video_only,
+      )
+      self.set_output(request, output)
+      self.rpc(
+        :StartWebEgress,
+        request,
+        headers: auth_header(roomRecord: true),
+      )
+    end
 
     def update_layout(egress_id, layout)
       self.rpc(
