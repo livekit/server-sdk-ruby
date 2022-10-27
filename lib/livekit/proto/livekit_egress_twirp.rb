@@ -10,6 +10,7 @@ module LiveKit
       rpc :StartRoomCompositeEgress, RoomCompositeEgressRequest, EgressInfo, :ruby_method => :start_room_composite_egress
       rpc :StartTrackCompositeEgress, TrackCompositeEgressRequest, EgressInfo, :ruby_method => :start_track_composite_egress
       rpc :StartTrackEgress, TrackEgressRequest, EgressInfo, :ruby_method => :start_track_egress
+      rpc :StartWebEgress, WebEgressRequest, EgressInfo, :ruby_method => :start_web_egress
       rpc :UpdateLayout, UpdateLayoutRequest, EgressInfo, :ruby_method => :update_layout
       rpc :UpdateStream, UpdateStreamRequest, EgressInfo, :ruby_method => :update_stream
       rpc :ListEgress, ListEgressRequest, ListEgressResponse, :ruby_method => :list_egress
