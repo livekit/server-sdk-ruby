@@ -34,7 +34,8 @@ module LiveKit
 
   class VideoGrant
     attr_accessor :roomCreate, :roomJoin, :roomList, :roomRecord, :roomAdmin,
-      :room, :canPublish, :canSubscribe, :canPublishData, :hidden, :recorder
+      :room, :canPublish, :canSubscribe, :canPublishData, :hidden, :recorder,
+      :ingressAdmin
 
     def initialize(
       # true if can create or delete rooms
@@ -58,7 +59,9 @@ module LiveKit
       # if participant should remain invisible to others
       hidden: nil,
       # if participant is recording the room
-      recorder: nil
+      recorder: nil,
+      # can create and manage Ingress
+      ingressAdmin: nil
     )
       @roomCreate = roomCreate
       @roomJoin = roomJoin
@@ -71,6 +74,7 @@ module LiveKit
       @canPublishData = canPublishData
       @hidden = hidden
       @recorder = recorder
+      @ingressAdmin = ingressAdmin
     end
 
     def self.from_hash(hash)
@@ -90,6 +94,7 @@ module LiveKit
         canPublishData: hash["canPublishData"],
         hidden: hash["hidden"],
         recorder: hash["recorder"],
+        ingressAdmin: hash["ingressAdmin"]
       )
     end
 
