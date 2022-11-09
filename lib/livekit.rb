@@ -10,3 +10,4 @@ require "livekit/version"
 $LOAD_PATH.unshift(File.expand_path("livekit/proto", __dir__))
 require "livekit/room_service_client"
 require "livekit/egress_service_client"
+require "livekit/ingress_service_client"
