@@ -3,7 +3,7 @@ PATH
   specs:
     livekit-server-sdk (0.4.0)
       google-protobuf (~> 3.21.0)
-      jwt (~> 2.2.3)
+      jwt (>= 2.2.3, < 3.0)
       twirp (~> 1.9.0)
 
 GEM
