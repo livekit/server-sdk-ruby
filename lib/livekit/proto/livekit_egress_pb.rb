@@ -11,6 +11,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :audio_only, :bool, 3
       optional :video_only, :bool, 4
       optional :custom_base_url, :string, 5
+      repeated :file_outputs, :message, 11, "livekit.EncodedFileOutput"
+      repeated :stream_outputs, :message, 12, "livekit.StreamOutput"
+      repeated :segment_outputs, :message, 13, "livekit.SegmentedFileOutput"
       oneof :output do
         optional :file, :message, 6, "livekit.EncodedFileOutput"
         optional :stream, :message, 7, "livekit.StreamOutput"
@@ -21,10 +24,30 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
         optional :advanced, :message, 9, "livekit.EncodingOptions"
       end
     end
+    add_message "livekit.WebEgressRequest" do
+      optional :url, :string, 1
+      optional :audio_only, :bool, 2
+      optional :video_only, :bool, 3
+      repeated :file_outputs, :message, 9, "livekit.EncodedFileOutput"
+      repeated :stream_outputs, :message, 10, "livekit.StreamOutput"
+      repeated :segment_outputs, :message, 11, "livekit.SegmentedFileOutput"
+      oneof :output do
+        optional :file, :message, 4, "livekit.EncodedFileOutput"
+        optional :stream, :message, 5, "livekit.StreamOutput"
+        optional :segments, :message, 6, "livekit.SegmentedFileOutput"
+      end
+      oneof :options do
+        optional :preset, :enum, 7, "livekit.EncodingOptionsPreset"
+        optional :advanced, :message, 8, "livekit.EncodingOptions"
+      end
+    end
     add_message "livekit.TrackCompositeEgressRequest" do
       optional :room_name, :string, 1
       optional :audio_track_id, :string, 2
       optional :video_track_id, :string, 3
+      repeated :file_outputs, :message, 11, "livekit.EncodedFileOutput"
+      repeated :stream_outputs, :message, 12, "livekit.StreamOutput"
+      repeated :segment_outputs, :message, 13, "livekit.SegmentedFileOutput"
       oneof :output do
         optional :file, :message, 4, "livekit.EncodedFileOutput"
         optional :stream, :message, 5, "livekit.StreamOutput"
@@ -41,20 +64,6 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       oneof :output do
         optional :file, :message, 3, "livekit.DirectFileOutput"
         optional :websocket_url, :string, 4
-      end
-    end
-    add_message "livekit.WebEgressRequest" do
-      optional :url, :string, 1
-      optional :audio_only, :bool, 2
-      optional :video_only, :bool, 3
-      oneof :output do
-        optional :file, :message, 4, "livekit.EncodedFileOutput"
-        optional :stream, :message, 5, "livekit.StreamOutput"
-        optional :segments, :message, 6, "livekit.SegmentedFileOutput"
-      end
-      oneof :options do
-        optional :preset, :enum, 7, "livekit.EncodingOptionsPreset"
-        optional :advanced, :message, 8, "livekit.EncodingOptions"
       end
     end
     add_message "livekit.EncodedFileOutput" do
@@ -131,6 +140,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :audio_frequency, :int32, 7
       optional :video_codec, :enum, 8, "livekit.VideoCodec"
       optional :video_bitrate, :int32, 9
+      optional :key_frame_interval, :double, 10
     end
     add_message "livekit.UpdateLayoutRequest" do
       optional :egress_id, :string, 1
@@ -143,6 +153,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "livekit.ListEgressRequest" do
       optional :room_name, :string, 1
+      optional :egress_id, :string, 2
     end
     add_message "livekit.ListEgressResponse" do
       repeated :items, :message, 1, "livekit.EgressInfo"
@@ -158,6 +169,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :started_at, :int64, 10
       optional :ended_at, :int64, 11
       optional :error, :string, 9
+      repeated :stream_results, :message, 15, "livekit.StreamInfo"
+      repeated :file_results, :message, 16, "livekit.FileInfo"
+      repeated :segment_results, :message, 17, "livekit.SegmentsInfo"
       oneof :request do
         optional :room_composite, :message, 4, "livekit.RoomCompositeEgressRequest"
         optional :track_composite, :message, 5, "livekit.TrackCompositeEgressRequest"
@@ -179,6 +193,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :ended_at, :int64, 3
       optional :duration, :int64, 4
       optional :status, :enum, 5, "livekit.StreamInfo.Status"
+      optional :error, :string, 6
     end
     add_enum "livekit.StreamInfo.Status" do
       value :ACTIVE, 0
@@ -216,13 +231,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :MP4, 1
       value :OGG, 2
     end
-    add_enum "livekit.StreamProtocol" do
-      value :DEFAULT_PROTOCOL, 0
-      value :RTMP, 1
-    end
     add_enum "livekit.SegmentedFileProtocol" do
       value :DEFAULT_SEGMENTED_FILE_PROTOCOL, 0
       value :HLS_PROTOCOL, 1
+    end
+    add_enum "livekit.StreamProtocol" do
+      value :DEFAULT_PROTOCOL, 0
+      value :RTMP, 1
     end
     add_enum "livekit.AudioCodec" do
       value :DEFAULT_AC, 0
@@ -260,9 +275,9 @@ end
 module LiveKit
   module Proto
     RoomCompositeEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RoomCompositeEgressRequest").msgclass
+    WebEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.WebEgressRequest").msgclass
     TrackCompositeEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackCompositeEgressRequest").msgclass
     TrackEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackEgressRequest").msgclass
-    WebEgressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.WebEgressRequest").msgclass
     EncodedFileOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodedFileOutput").msgclass
     SegmentedFileOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentedFileOutput").msgclass
     DirectFileOutput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DirectFileOutput").msgclass
@@ -285,8 +300,8 @@ module LiveKit
     SegmentsInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentsInfo").msgclass
     AutoTrackEgress = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.AutoTrackEgress").msgclass
     EncodedFileType = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodedFileType").enummodule
-    StreamProtocol = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamProtocol").enummodule
     SegmentedFileProtocol = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentedFileProtocol").enummodule
+    StreamProtocol = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamProtocol").enummodule
     AudioCodec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.AudioCodec").enummodule
     VideoCodec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoCodec").enummodule
     EncodingOptionsPreset = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodingOptionsPreset").enummodule
