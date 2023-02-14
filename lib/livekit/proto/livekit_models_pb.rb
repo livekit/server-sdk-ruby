@@ -27,6 +27,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :can_subscribe, :bool, 1
       optional :can_publish, :bool, 2
       optional :can_publish_data, :bool, 3
+      repeated :can_publish_sources, :enum, 9, "livekit.TrackSource"
       optional :hidden, :bool, 7
       optional :recorder, :bool, 8
     end
@@ -48,6 +49,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :JOINED, 1
       value :ACTIVE, 2
       value :DISCONNECTED, 3
+    end
+    add_message "livekit.Encryption" do
+    end
+    add_enum "livekit.Encryption.Type" do
+      value :NONE, 0
+      value :GCM, 1
+      value :CUSTOM, 2
     end
     add_message "livekit.SimulcastCodecInfo" do
       optional :mime_type, :string, 1
@@ -71,6 +79,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :codecs, :message, 13, "livekit.SimulcastCodecInfo"
       optional :stereo, :bool, 14
       optional :disable_red, :bool, 15
+      optional :encryption, :enum, 16, "livekit.Encryption.Type"
     end
     add_message "livekit.VideoLayer" do
       optional :quality, :enum, 1, "livekit.VideoQuality"
@@ -238,6 +247,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :STATE_MISMATCH, 6
       value :JOIN_FAILURE, 7
     end
+    add_enum "livekit.ReconnectReason" do
+      value :RR_UNKOWN, 0
+      value :RR_SIGNAL_DISCONNECTED, 1
+      value :RR_PUBLISHER_FAILED, 2
+      value :RR_SUBSCRIBER_FAILED, 3
+      value :RR_SWITCH_CANDIDATE, 4
+    end
   end
 end
 
@@ -248,6 +264,8 @@ module LiveKit
     ParticipantPermission = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantPermission").msgclass
     ParticipantInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantInfo").msgclass
     ParticipantInfo::State = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantInfo.State").enummodule
+    Encryption = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.Encryption").msgclass
+    Encryption::Type = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.Encryption.Type").enummodule
     SimulcastCodecInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SimulcastCodecInfo").msgclass
     TrackInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackInfo").msgclass
     VideoLayer = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoLayer").msgclass
@@ -272,5 +290,6 @@ module LiveKit
     ConnectionQuality = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ConnectionQuality").enummodule
     ClientConfigSetting = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ClientConfigSetting").enummodule
     DisconnectReason = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DisconnectReason").enummodule
+    ReconnectReason = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ReconnectReason").enummodule
   end
 end

@@ -51,6 +51,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :audio, :message, 4, "livekit.InputAudioState"
       optional :room_id, :string, 5
       optional :started_at, :int64, 7
+      optional :ended_at, :int64, 8
       repeated :tracks, :message, 6, "livekit.TrackInfo"
     end
     add_enum "livekit.IngressState.Status" do
