@@ -178,11 +178,11 @@ module LiveKit
       if output.is_a? Array
         output.each do |out|
           if out.is_a? LiveKit::Proto::EncodedFileOutput
-            request.file_outputs = [output]
+            request.file_outputs = [out]
           elsif out.is_a? LiveKit::Proto::SegmentedFileOutput
-            request.segment_outputs = [output]
+            request.segment_outputs = [out]
           else
-            request.stream_outputs = [output]
+            request.stream_outputs = [out]
           end
         end
       elsif output.is_a? LiveKit::Proto::EncodedFileOutput
