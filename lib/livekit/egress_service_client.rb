@@ -15,7 +15,7 @@ module LiveKit
 
     def start_room_composite_egress(
       room_name,
-      # one of EncodedFileOutput, SegmentedFileOutput or StreamOutput
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
       output,
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
@@ -49,7 +49,7 @@ module LiveKit
 
     def start_track_composite_egress(
       room_name,
-      # one of EncodedFileOutput, SegmentedFileOutput or StreamOutput
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
       output,
       # TrackID of an audio track
       audio_track_id: nil,
@@ -99,7 +99,7 @@ module LiveKit
 
     def start_web_egress(
       url,
-      # one of EncodedFileOutput, SegmentedFileOutput or StreamOutput
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
       output,
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
@@ -175,12 +175,25 @@ module LiveKit
       if output.nil?
         raise "output cannot be nil"
       end
-      if output.is_a? LiveKit::Proto::EncodedFileOutput or output.is_a? LiveKit::Proto::DirectFileOutput
+      if output.is_a? Array
+        output.each do |out|
+          if out.is_a? LiveKit::Proto::EncodedFileOutput
+            request.file_outputs = [output]
+          elsif out.is_a? LiveKit::Proto::SegmentedFileOutput
+            request.segment_outputs = [output]
+          else
+            request.stream_outputs = [output]
+          end
+        end
+      elsif output.is_a? LiveKit::Proto::EncodedFileOutput
         request.file = output
+        request.file_outputs = [output]
       elsif output.is_a? LiveKit::Proto::SegmentedFileOutput
         request.segments = output
+        request.segment_outputs = [output]
       else
         request.stream = output
+        request.stream_outputs = [output]
       end
     end
   end

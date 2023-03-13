@@ -19,7 +19,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.IngressAudioOptions" do
       optional :name, :string, 1
       optional :source, :enum, 2, "livekit.TrackSource"
-      optional :mime_type, :string, 3
+      optional :audio_codec, :enum, 7, "livekit.AudioCodec"
       optional :bitrate, :uint32, 4
       optional :disable_dtx, :bool, 5
       optional :channels, :uint32, 6
@@ -27,7 +27,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.IngressVideoOptions" do
       optional :name, :string, 1
       optional :source, :enum, 2, "livekit.TrackSource"
-      optional :mime_type, :string, 3
+      optional :video_codec, :enum, 5, "livekit.VideoCodec"
       repeated :layers, :message, 4, "livekit.VideoLayer"
     end
     add_message "livekit.IngressInfo" do
@@ -61,13 +61,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :ENDPOINT_ERROR, 3
     end
     add_message "livekit.InputVideoState" do
-      optional :mime_type, :uint32, 1
+      optional :mime_type, :string, 1
       optional :width, :uint32, 3
       optional :height, :uint32, 4
       optional :framerate, :uint32, 5
     end
     add_message "livekit.InputAudioState" do
-      optional :mime_type, :uint32, 1
+      optional :mime_type, :string, 1
       optional :channels, :uint32, 3
       optional :sample_rate, :uint32, 4
     end
