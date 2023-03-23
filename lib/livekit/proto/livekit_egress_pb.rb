@@ -3,6 +3,8 @@
 
 require 'google/protobuf'
 
+require 'livekit_models_pb'
+
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("livekit_egress.proto", :syntax => :proto3) do
     add_message "livekit.RoomCompositeEgressRequest" do
@@ -82,6 +84,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :filename_prefix, :string, 2
       optional :playlist_name, :string, 3
       optional :segment_duration, :uint32, 4
+      optional :filename_suffix, :enum, 10, "livekit.SegmentedFileSuffix"
       optional :disable_manifest, :bool, 8
       oneof :output do
         optional :s3, :message, 5, "livekit.S3Upload"
@@ -111,7 +114,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :tagging, :string, 8
     end
     add_message "livekit.GCPUpload" do
-      optional :credentials, :bytes, 1
+      optional :credentials, :string, 1
       optional :bucket, :string, 2
     end
     add_message "livekit.AzureBlobUpload" do
@@ -154,6 +157,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.ListEgressRequest" do
       optional :room_name, :string, 1
       optional :egress_id, :string, 2
+      optional :active, :bool, 3
     end
     add_message "livekit.ListEgressResponse" do
       repeated :items, :message, 1, "livekit.EgressInfo"
@@ -235,20 +239,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :DEFAULT_SEGMENTED_FILE_PROTOCOL, 0
       value :HLS_PROTOCOL, 1
     end
+    add_enum "livekit.SegmentedFileSuffix" do
+      value :INDEX, 0
+      value :TIMESTAMP, 1
+    end
     add_enum "livekit.StreamProtocol" do
       value :DEFAULT_PROTOCOL, 0
       value :RTMP, 1
-    end
-    add_enum "livekit.AudioCodec" do
-      value :DEFAULT_AC, 0
-      value :OPUS, 1
-      value :AAC, 2
-    end
-    add_enum "livekit.VideoCodec" do
-      value :DEFAULT_VC, 0
-      value :H264_BASELINE, 1
-      value :H264_MAIN, 2
-      value :H264_HIGH, 3
     end
     add_enum "livekit.EncodingOptionsPreset" do
       value :H264_720P_30, 0
@@ -301,9 +298,8 @@ module LiveKit
     AutoTrackEgress = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.AutoTrackEgress").msgclass
     EncodedFileType = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodedFileType").enummodule
     SegmentedFileProtocol = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentedFileProtocol").enummodule
+    SegmentedFileSuffix = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SegmentedFileSuffix").enummodule
     StreamProtocol = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.StreamProtocol").enummodule
-    AudioCodec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.AudioCodec").enummodule
-    VideoCodec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoCodec").enummodule
     EncodingOptionsPreset = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EncodingOptionsPreset").enummodule
     EgressStatus = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.EgressStatus").enummodule
   end

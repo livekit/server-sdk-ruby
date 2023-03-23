@@ -73,6 +73,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :data, :bytes, 2
       optional :kind, :enum, 3, "livekit.DataPacket.Kind"
       repeated :destination_sids, :string, 4
+      proto3_optional :topic, :string, 5
     end
     add_message "livekit.SendDataResponse" do
     end

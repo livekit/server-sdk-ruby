@@ -19,16 +19,29 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.IngressAudioOptions" do
       optional :name, :string, 1
       optional :source, :enum, 2, "livekit.TrackSource"
-      optional :mime_type, :string, 3
-      optional :bitrate, :uint32, 4
-      optional :disable_dtx, :bool, 5
-      optional :channels, :uint32, 6
+      oneof :encoding_options do
+        optional :preset, :enum, 3, "livekit.IngressAudioEncodingPreset"
+        optional :options, :message, 4, "livekit.IngressAudioEncodingOptions"
+      end
     end
     add_message "livekit.IngressVideoOptions" do
       optional :name, :string, 1
       optional :source, :enum, 2, "livekit.TrackSource"
-      optional :mime_type, :string, 3
-      repeated :layers, :message, 4, "livekit.VideoLayer"
+      oneof :encoding_options do
+        optional :preset, :enum, 3, "livekit.IngressVideoEncodingPreset"
+        optional :options, :message, 4, "livekit.IngressVideoEncodingOptions"
+      end
+    end
+    add_message "livekit.IngressAudioEncodingOptions" do
+      optional :audio_codec, :enum, 1, "livekit.AudioCodec"
+      optional :bitrate, :uint32, 2
+      optional :disable_dtx, :bool, 3
+      optional :channels, :uint32, 4
+    end
+    add_message "livekit.IngressVideoEncodingOptions" do
+      optional :video_codec, :enum, 1, "livekit.VideoCodec"
+      optional :frame_rate, :double, 2
+      repeated :layers, :message, 3, "livekit.VideoLayer"
     end
     add_message "livekit.IngressInfo" do
       optional :ingress_id, :string, 1
@@ -61,13 +74,13 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :ENDPOINT_ERROR, 3
     end
     add_message "livekit.InputVideoState" do
-      optional :mime_type, :uint32, 1
+      optional :mime_type, :string, 1
       optional :width, :uint32, 3
       optional :height, :uint32, 4
       optional :framerate, :uint32, 5
     end
     add_message "livekit.InputAudioState" do
-      optional :mime_type, :uint32, 1
+      optional :mime_type, :string, 1
       optional :channels, :uint32, 3
       optional :sample_rate, :uint32, 4
     end
@@ -92,6 +105,17 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_enum "livekit.IngressInput" do
       value :RTMP_INPUT, 0
     end
+    add_enum "livekit.IngressAudioEncodingPreset" do
+      value :OPUS_STEREO_96KBPS, 0
+      value :OPUS_MONO_64KBS, 1
+    end
+    add_enum "livekit.IngressVideoEncodingPreset" do
+      value :H264_720P_30FPS_3_LAYERS, 0
+      value :H264_1080P_30FPS_3_LAYERS, 1
+      value :H264_540P_25FPS_2_LAYERS, 2
+      value :H264_720P_30FPS_1_LAYER, 3
+      value :H264_1080P_30FPS_1_LAYER, 4
+    end
   end
 end
 
@@ -100,6 +124,8 @@ module LiveKit
     CreateIngressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.CreateIngressRequest").msgclass
     IngressAudioOptions = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressAudioOptions").msgclass
     IngressVideoOptions = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressVideoOptions").msgclass
+    IngressAudioEncodingOptions = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressAudioEncodingOptions").msgclass
+    IngressVideoEncodingOptions = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressVideoEncodingOptions").msgclass
     IngressInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressInfo").msgclass
     IngressState = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressState").msgclass
     IngressState::Status = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressState.Status").enummodule
@@ -110,5 +136,7 @@ module LiveKit
     ListIngressResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ListIngressResponse").msgclass
     DeleteIngressRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DeleteIngressRequest").msgclass
     IngressInput = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressInput").enummodule
+    IngressAudioEncodingPreset = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressAudioEncodingPreset").enummodule
+    IngressVideoEncodingPreset = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.IngressVideoEncodingPreset").enummodule
   end
 end
