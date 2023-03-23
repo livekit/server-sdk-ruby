@@ -30,6 +30,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :can_publish_sources, :enum, 9, "livekit.TrackSource"
       optional :hidden, :bool, 7
       optional :recorder, :bool, 8
+      optional :can_update_metadata, :bool, 10
     end
     add_message "livekit.ParticipantInfo" do
       optional :sid, :string, 1
@@ -111,6 +112,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :participant_sid, :string, 1
       optional :payload, :bytes, 2
       repeated :destination_sids, :string, 3
+      proto3_optional :topic, :string, 4
     end
     add_message "livekit.ParticipantTracks" do
       optional :participant_sid, :string, 1
@@ -148,6 +150,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :FLUTTER, 4
       value :GO, 5
       value :UNITY, 6
+      value :REACT_NATIVE, 7
+      value :RUST, 8
     end
     add_message "livekit.ClientConfiguration" do
       optional :video, :message, 1, "livekit.VideoConfiguration"
@@ -208,6 +212,18 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.TimedVersion" do
       optional :unix_micro, :int64, 1
       optional :ticks, :int32, 2
+    end
+    add_enum "livekit.AudioCodec" do
+      value :DEFAULT_AC, 0
+      value :OPUS, 1
+      value :AAC, 2
+    end
+    add_enum "livekit.VideoCodec" do
+      value :DEFAULT_VC, 0
+      value :H264_BASELINE, 1
+      value :H264_MAIN, 2
+      value :H264_HIGH, 3
+      value :VP8, 4
     end
     add_enum "livekit.TrackType" do
       value :AUDIO, 0
@@ -284,6 +300,8 @@ module LiveKit
     DisabledCodecs = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DisabledCodecs").msgclass
     RTPStats = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.RTPStats").msgclass
     TimedVersion = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TimedVersion").msgclass
+    AudioCodec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.AudioCodec").enummodule
+    VideoCodec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoCodec").enummodule
     TrackType = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackType").enummodule
     TrackSource = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.TrackSource").enummodule
     VideoQuality = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.VideoQuality").enummodule
