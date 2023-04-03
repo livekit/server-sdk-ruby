@@ -15,7 +15,7 @@ module LiveKit
 
     def start_room_composite_egress(
       room_name,
-      # one of EncodedFileOutput, SegmentedFileOutput or StreamOutput
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
       output,
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
@@ -49,7 +49,7 @@ module LiveKit
 
     def start_track_composite_egress(
       room_name,
-      # one of EncodedFileOutput, SegmentedFileOutput or StreamOutput
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
       output,
       # TrackID of an audio track
       audio_track_id: nil,
@@ -99,7 +99,7 @@ module LiveKit
 
     def start_web_egress(
       url,
-      # one of EncodedFileOutput, SegmentedFileOutput or StreamOutput
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
       output,
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
@@ -172,15 +172,29 @@ module LiveKit
 
     # helper that sets output to file or stream
     def set_output(request, output)
-      if output.nil?
-        raise "output cannot be nil"
-      end
-      if output.is_a? LiveKit::Proto::EncodedFileOutput or output.is_a? LiveKit::Proto::DirectFileOutput
+      raise "output cannot be nil" if output.nil?
+      if output.is_a? Array
+        output.each do |out|
+          if out.is_a? LiveKit::Proto::EncodedFileOutput
+            raise "cannot add multiple file outputs" if request.file_outputs.any?
+            request.file_outputs = [out]
+          elsif out.is_a? LiveKit::Proto::SegmentedFileOutput
+            raise "cannot add multiple segmented file outputs" if request.segment_outputs.any?
+            request.segment_outputs = [out]
+          elsif out.is_a? Livekit::Proto::StreamOutput
+            raise "cannot add multiple stream outputs" if request.stream_outputs.any?
+            request.stream_outputs = [out]
+          end
+        end
+      elsif output.is_a? LiveKit::Proto::EncodedFileOutput
         request.file = output
+        request.file_outputs = [output]
       elsif output.is_a? LiveKit::Proto::SegmentedFileOutput
         request.segments = output
-      else
+        request.segment_outputs = [output]
+      elsif output.is_a? LiveKit::Proto::StreamOutput
         request.stream = output
+        request.stream_outputs = [output]
       end
     end
   end
