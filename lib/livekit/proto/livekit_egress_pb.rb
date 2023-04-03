@@ -157,6 +157,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "livekit.ListEgressRequest" do
       optional :room_name, :string, 1
       optional :egress_id, :string, 2
+      optional :active, :bool, 3
     end
     add_message "livekit.ListEgressResponse" do
       repeated :items, :message, 1, "livekit.EgressInfo"

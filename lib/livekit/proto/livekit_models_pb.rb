@@ -150,6 +150,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :FLUTTER, 4
       value :GO, 5
       value :UNITY, 6
+      value :REACT_NATIVE, 7
+      value :RUST, 8
     end
     add_message "livekit.ClientConfiguration" do
       optional :video, :message, 1, "livekit.VideoConfiguration"
