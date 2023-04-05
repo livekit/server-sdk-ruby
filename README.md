@@ -2,7 +2,9 @@
 
 # LiveKit Server API for Ruby
 
-Ruby API for server-side integrations with LiveKit. <!--BEGIN_DESCRIPTION--><!--END_DESCRIPTION-->
+<!--BEGIN_DESCRIPTION-->
+Ruby API for server-side integrations with LiveKit.
+<!--END_DESCRIPTION-->
 
 This library is designed to work with Ruby 2.6.0 and above.
 
