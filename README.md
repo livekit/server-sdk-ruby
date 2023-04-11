@@ -1,6 +1,10 @@
+<!--BEGIN_BANNER_IMAGE--><!--END_BANNER_IMAGE-->
+
 # LiveKit Server API for Ruby
 
+<!--BEGIN_DESCRIPTION-->
 Ruby API for server-side integrations with LiveKit. This gem provides the ability to create access tokens as well as access RoomService.
+<!--END_DESCRIPTION-->
 
 This library is designed to work with Ruby 2.6.0 and above.
 
@@ -122,3 +126,6 @@ You may store credentials in environment variables. If api-key or api-secret is 
 ## License
 
 The gem is available as open source under the terms of Apache 2.0 License.
+
+<!--BEGIN_REPO_NAV--><!--END_REPO_NAV-->
+
