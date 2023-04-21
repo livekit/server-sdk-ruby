@@ -34,8 +34,8 @@ module LiveKit
 
   class VideoGrant
     attr_accessor :roomCreate, :roomJoin, :roomList, :roomRecord, :roomAdmin,
-      :room, :canPublish, :canSubscribe, :canPublishData, :hidden, :recorder,
-      :ingressAdmin
+      :room, :canPublish, :canPublishSources, :canSubscribe, :canPublishData,
+      :canUpdateOwnMetadata, :hidden, :recorder, :ingressAdmin
 
     def initialize(
       # true if can create or delete rooms
@@ -52,10 +52,14 @@ module LiveKit
       room: nil,
       # for join tokens, can participant publish, true by default
       canPublish: nil,
+      # TrackSource types that a participant may publish
+      canPublishSources: nil,
       # for join tokens, can participant subscribe, true by default
       canSubscribe: nil,
       # for join tokens, can participant publish data messages, true by default
       canPublishData: nil,
+      # by default, a participant is not allowed to update its own metadata
+      canUpdateOwnMetadata: nil,
       # if participant should remain invisible to others
       hidden: nil,
       # if participant is recording the room
@@ -70,8 +74,10 @@ module LiveKit
       @roomAdmin = roomAdmin
       @room = room
       @canPublish = canPublish
+      @canPublishSources = canPublishSources
       @canSubscribe = canSubscribe
       @canPublishData = canPublishData
+      @canUpdateOwnMetadata = canUpdateOwnMetadata
       @hidden = hidden
       @recorder = recorder
       @ingressAdmin = ingressAdmin
@@ -90,8 +96,10 @@ module LiveKit
         roomAdmin: hash["roomAdmin"],
         room: hash["room"],
         canPublish: hash["canPublish"],
+        canPublishSources: hash["canPublishSources"],
         canSubscribe: hash["canSubscribe"],
         canPublishData: hash["canPublishData"],
+        canUpdateOwnMetadata: hash["canUpdateOwnMetadata"],
         hidden: hash["hidden"],
         recorder: hash["recorder"],
         ingressAdmin: hash["ingressAdmin"]

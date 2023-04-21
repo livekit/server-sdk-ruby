@@ -18,6 +18,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :track, :message, 8, "livekit.TrackInfo"
       optional :id, :string, 6
       optional :created_at, :int64, 7
+      optional :num_dropped, :int32, 11
     end
   end
 end
