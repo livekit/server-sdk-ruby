@@ -177,24 +177,24 @@ module LiveKit
         output.each do |out|
           if out.is_a? LiveKit::Proto::EncodedFileOutput
             raise "cannot add multiple file outputs" if request.file_outputs.any?
-            request.file_outputs = [out]
+            request.file_outputs = Google::Protobuf::RepeatedField.new(Proto::EncodedFileOutput, [out])
           elsif out.is_a? LiveKit::Proto::SegmentedFileOutput
             raise "cannot add multiple segmented file outputs" if request.segment_outputs.any?
-            request.segment_outputs = [out]
+            request.segment_outputs = Google::Protobuf::RepeatedField.new(Proto::SegmentedFileOutput, [out])
           elsif out.is_a? Livekit::Proto::StreamOutput
             raise "cannot add multiple stream outputs" if request.stream_outputs.any?
-            request.stream_outputs = [out]
+            request.stream_outputs = Google::Protobuf::RepeatedField.new(Proto::StreamOutput, [out])
           end
         end
       elsif output.is_a? LiveKit::Proto::EncodedFileOutput
         request.file = output
-        request.file_outputs = [output]
+        request.file_outputs = Google::Protobuf::RepeatedField.new(Proto::EncodedFileOutput, [output])
       elsif output.is_a? LiveKit::Proto::SegmentedFileOutput
         request.segments = output
-        request.segment_outputs = [output]
+        request.segment_outputs = Google::Protobuf::RepeatedField.new(Proto::SegmentedFileOutput, [output])
       elsif output.is_a? LiveKit::Proto::StreamOutput
         request.stream = output
-        request.stream_outputs = [output]
+        request.stream_outputs = Google::Protobuf::RepeatedField.new(Proto::StreamOutput, [output])
       end
     end
   end
