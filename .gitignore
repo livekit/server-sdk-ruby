@@ -9,5 +9,9 @@
 /tmp/
 /vendor/bundle
 
+#dev
+test/
+livekit-server-sdk-*.gem
+
 # rspec failure tracking
 .rspec_status
