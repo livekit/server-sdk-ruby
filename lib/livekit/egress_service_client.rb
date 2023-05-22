@@ -144,18 +144,21 @@ module LiveKit
         :UpdateStream,
         Proto::UpdateStreamRequest.new(
           egress_id: egress_id,
-          add_output_urls: Google::Protobuf::RepeatedField.new(:string, add_output_urls.to_a),
-          remove_output_urls: Google::Protobuf::RepeatedField.new(:string, remove_output_urls.to_a),
+          add_output_urls: add_output_urls,
+          remove_output_urls: remove_output_urls,
         ),
         headers: auth_header(roomRecord: true),
       )
     end
 
     # list all egress or only egress for a room
-    def list_egress(room_name: nil)
+    def list_egress(
+      room_name: nil,
+      active: false
+    )
       self.rpc(
         :ListEgress,
-        Proto::ListEgressRequest.new(room_name: room_name),
+        Proto::ListEgressRequest.new(room_name: room_name, active: active),
         headers: auth_header(roomRecord: true),
       )
     end
@@ -177,24 +180,24 @@ module LiveKit
         output.each do |out|
           if out.is_a? LiveKit::Proto::EncodedFileOutput
             raise "cannot add multiple file outputs" if request.file_outputs.any?
-            request.file_outputs = Google::Protobuf::RepeatedField.new(Proto::EncodedFileOutput, [out])
+            request.file_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::EncodedFileOutput, [out])
           elsif out.is_a? LiveKit::Proto::SegmentedFileOutput
             raise "cannot add multiple segmented file outputs" if request.segment_outputs.any?
-            request.segment_outputs = Google::Protobuf::RepeatedField.new(Proto::SegmentedFileOutput, [out])
+            request.segment_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::SegmentedFileOutput, [out])
           elsif out.is_a? Livekit::Proto::StreamOutput
             raise "cannot add multiple stream outputs" if request.stream_outputs.any?
-            request.stream_outputs = Google::Protobuf::RepeatedField.new(Proto::StreamOutput, [out])
+            request.stream_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::StreamOutput, [out])
           end
         end
       elsif output.is_a? LiveKit::Proto::EncodedFileOutput
         request.file = output
-        request.file_outputs = Google::Protobuf::RepeatedField.new(Proto::EncodedFileOutput, [output])
+        request.file_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::EncodedFileOutput, [output])
       elsif output.is_a? LiveKit::Proto::SegmentedFileOutput
         request.segments = output
-        request.segment_outputs = Google::Protobuf::RepeatedField.new(Proto::SegmentedFileOutput, [output])
+        request.segment_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::SegmentedFileOutput, [output])
       elsif output.is_a? LiveKit::Proto::StreamOutput
         request.stream = output
-        request.stream_outputs = Google::Protobuf::RepeatedField.new(Proto::StreamOutput, [output])
+        request.stream_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::StreamOutput, [output])
       end
     end
   end
