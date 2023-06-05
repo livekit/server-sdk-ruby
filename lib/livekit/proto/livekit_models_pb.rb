@@ -17,6 +17,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :enabled_codecs, :message, 7, "livekit.Codec"
       optional :metadata, :string, 8
       optional :num_participants, :uint32, 9
+      optional :num_publishers, :uint32, 11
       optional :active_recording, :bool, 10
     end
     add_message "livekit.Codec" do
@@ -165,6 +166,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "livekit.DisabledCodecs" do
       repeated :codecs, :message, 1, "livekit.Codec"
+      repeated :publish, :message, 2, "livekit.Codec"
     end
     add_message "livekit.RTPStats" do
       optional :start_time, :message, 1, "google.protobuf.Timestamp"
@@ -208,6 +210,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :last_key_frame, :message, 34, "google.protobuf.Timestamp"
       optional :layer_lock_plis, :uint32, 35
       optional :last_layer_lock_pli, :message, 36, "google.protobuf.Timestamp"
+      optional :sample_rate, :double, 42
+      optional :drift_ms, :double, 43
     end
     add_message "livekit.TimedVersion" do
       optional :unix_micro, :int64, 1
@@ -270,6 +274,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :RR_SUBSCRIBER_FAILED, 3
       value :RR_SWITCH_CANDIDATE, 4
     end
+    add_enum "livekit.SubscriptionError" do
+      value :SE_UNKOWN, 0
+      value :SE_CODEC_UNSUPPORTED, 1
+      value :SE_TRACK_NOTFOUND, 2
+    end
   end
 end
 
@@ -309,5 +318,6 @@ module LiveKit
     ClientConfigSetting = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ClientConfigSetting").enummodule
     DisconnectReason = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.DisconnectReason").enummodule
     ReconnectReason = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ReconnectReason").enummodule
+    SubscriptionError = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.SubscriptionError").enummodule
   end
 end

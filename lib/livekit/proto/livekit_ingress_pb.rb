@@ -13,6 +13,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :room_name, :string, 3
       optional :participant_identity, :string, 4
       optional :participant_name, :string, 5
+      optional :bypass_transcoding, :bool, 8
       optional :audio, :message, 6, "livekit.IngressAudioOptions"
       optional :video, :message, 7, "livekit.IngressVideoOptions"
     end
@@ -49,6 +50,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :stream_key, :string, 3
       optional :url, :string, 4
       optional :input_type, :enum, 5, "livekit.IngressInput"
+      optional :bypass_transcoding, :bool, 13
       optional :audio, :message, 6, "livekit.IngressAudioOptions"
       optional :video, :message, 7, "livekit.IngressVideoOptions"
       optional :room_name, :string, 8
@@ -90,6 +92,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :room_name, :string, 3
       optional :participant_identity, :string, 4
       optional :participant_name, :string, 5
+      proto3_optional :bypass_transcoding, :bool, 8
       optional :audio, :message, 6, "livekit.IngressAudioOptions"
       optional :video, :message, 7, "livekit.IngressVideoOptions"
     end
@@ -104,6 +107,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_enum "livekit.IngressInput" do
       value :RTMP_INPUT, 0
+      value :WHIP_INPUT, 1
     end
     add_enum "livekit.IngressAudioEncodingPreset" do
       value :OPUS_STEREO_96KBPS, 0

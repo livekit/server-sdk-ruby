@@ -30,6 +30,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :url, :string, 1
       optional :audio_only, :bool, 2
       optional :video_only, :bool, 3
+      optional :await_start_signal, :bool, 12
       repeated :file_outputs, :message, 9, "livekit.EncodedFileOutput"
       repeated :stream_outputs, :message, 10, "livekit.StreamOutput"
       repeated :segment_outputs, :message, 11, "livekit.SegmentedFileOutput"

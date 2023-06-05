@@ -108,7 +108,9 @@ module LiveKit
       # true to record only audio
       audio_only: false,
       # true to record only video
-      video_only: false
+      video_only: false,
+      # true to await START_RECORDING chrome log
+      await_start_signal: false
     )
       request = Proto::WebEgressRequest.new(
         url: url,
@@ -116,6 +118,7 @@ module LiveKit
         advanced: advanced,
         audio_only: audio_only,
         video_only: video_only,
+        await_start_signal: await_start_signal,
       )
       self.set_output(request, output)
       self.rpc(
