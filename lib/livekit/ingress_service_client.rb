@@ -14,7 +14,6 @@ module LiveKit
     end
 
     def create_ingress(
-      # currently :RTMP_INPUT is the only supported type
       input_type,
       # optional, name to identify the ingress
       name: nil,
@@ -27,7 +26,9 @@ module LiveKit
       # optional, LiveKit::Proto::IngressAudioOptions
       audio: nil,
       # optional, LiveKit::Proto::IngressVideoOptions
-      video: nil
+      video: nil,
+      # optional, whether to forward input media unprocessed, for WHIP only
+      bypass_transcoding: nil
     )
       request = Proto::CreateIngressRequest.new(
         input_type: input_type,
@@ -37,6 +38,7 @@ module LiveKit
         participant_name: participant_name,
         audio: audio,
         video: video,
+        bypass_transcoding: bypass_transcoding,
       )
       self.rpc(
         :CreateIngress,
@@ -58,7 +60,9 @@ module LiveKit
       # optional, LiveKit::Proto::IngressAudioOptions
       audio: nil,
       # optional, LiveKit::Proto::IngressVideoOptions
-      video: nil
+      video: nil,
+      # optional, whether to forward input media unprocessed, for WHIP only
+      bypass_transcoding: nil
     )
       request = Proto::UpdateIngressRequest.new(
         ingress_id: ingress_id,
@@ -68,6 +72,7 @@ module LiveKit
         participant_name: participant_name,
         audio: audio,
         video: video,
+        ypass_transcoding: bypass_transcoding,
       )
       self.rpc(
         :UpdateIngress,
