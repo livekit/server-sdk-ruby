@@ -72,7 +72,7 @@ module LiveKit
         participant_name: participant_name,
         audio: audio,
         video: video,
-        ypass_transcoding: bypass_transcoding,
+        bypass_transcoding: bypass_transcoding,
       )
       self.rpc(
         :UpdateIngress,
