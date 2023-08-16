@@ -15,6 +15,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :node_id, :string, 4
       optional :metadata, :string, 5
       optional :egress, :message, 6, "livekit.RoomEgress"
+      optional :min_playout_delay, :uint32, 7
     end
     add_message "livekit.RoomEgress" do
       optional :room, :message, 1, "livekit.RoomCompositeEgressRequest"

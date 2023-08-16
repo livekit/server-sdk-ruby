@@ -19,10 +19,15 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :num_participants, :uint32, 9
       optional :num_publishers, :uint32, 11
       optional :active_recording, :bool, 10
+      optional :playout_delay, :message, 12, "livekit.PlayoutDelay"
     end
     add_message "livekit.Codec" do
       optional :mime, :string, 1
       optional :fmtp_line, :string, 2
+    end
+    add_message "livekit.PlayoutDelay" do
+      optional :enabled, :bool, 1
+      optional :min, :uint32, 2
     end
     add_message "livekit.ParticipantPermission" do
       optional :can_subscribe, :bool, 1
@@ -82,6 +87,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :stereo, :bool, 14
       optional :disable_red, :bool, 15
       optional :encryption, :enum, 16, "livekit.Encryption.Type"
+      optional :stream, :string, 17
     end
     add_message "livekit.VideoLayer" do
       optional :quality, :enum, 1, "livekit.VideoQuality"
@@ -153,6 +159,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :UNITY, 6
       value :REACT_NATIVE, 7
       value :RUST, 8
+      value :PYTHON, 9
+      value :CPP, 10
     end
     add_message "livekit.ClientConfiguration" do
       optional :video, :message, 1, "livekit.VideoConfiguration"
@@ -268,14 +276,14 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       value :JOIN_FAILURE, 7
     end
     add_enum "livekit.ReconnectReason" do
-      value :RR_UNKOWN, 0
+      value :RR_UNKNOWN, 0
       value :RR_SIGNAL_DISCONNECTED, 1
       value :RR_PUBLISHER_FAILED, 2
       value :RR_SUBSCRIBER_FAILED, 3
       value :RR_SWITCH_CANDIDATE, 4
     end
     add_enum "livekit.SubscriptionError" do
-      value :SE_UNKOWN, 0
+      value :SE_UNKNOWN, 0
       value :SE_CODEC_UNSUPPORTED, 1
       value :SE_TRACK_NOTFOUND, 2
     end
@@ -286,6 +294,7 @@ module LiveKit
   module Proto
     Room = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.Room").msgclass
     Codec = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.Codec").msgclass
+    PlayoutDelay = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.PlayoutDelay").msgclass
     ParticipantPermission = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantPermission").msgclass
     ParticipantInfo = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantInfo").msgclass
     ParticipantInfo::State = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("livekit.ParticipantInfo.State").enummodule
