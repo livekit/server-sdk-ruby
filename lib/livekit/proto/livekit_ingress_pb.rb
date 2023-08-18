@@ -9,6 +9,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("livekit_ingress.proto", :syntax => :proto3) do
     add_message "livekit.CreateIngressRequest" do
       optional :input_type, :enum, 1, "livekit.IngressInput"
+      optional :url, :string, 9
       optional :name, :string, 2
       optional :room_name, :string, 3
       optional :participant_identity, :string, 4
@@ -67,6 +68,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :room_id, :string, 5
       optional :started_at, :int64, 7
       optional :ended_at, :int64, 8
+      optional :resource_id, :string, 9
       repeated :tracks, :message, 6, "livekit.TrackInfo"
     end
     add_enum "livekit.IngressState.Status" do
@@ -77,12 +79,14 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "livekit.InputVideoState" do
       optional :mime_type, :string, 1
+      optional :average_bitrate, :uint32, 2
       optional :width, :uint32, 3
       optional :height, :uint32, 4
-      optional :framerate, :uint32, 5
+      optional :framerate, :double, 5
     end
     add_message "livekit.InputAudioState" do
       optional :mime_type, :string, 1
+      optional :average_bitrate, :uint32, 2
       optional :channels, :uint32, 3
       optional :sample_rate, :uint32, 4
     end
@@ -98,6 +102,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "livekit.ListIngressRequest" do
       optional :room_name, :string, 1
+      optional :ingress_id, :string, 2
     end
     add_message "livekit.ListIngressResponse" do
       repeated :items, :message, 1, "livekit.IngressInfo"
@@ -108,6 +113,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_enum "livekit.IngressInput" do
       value :RTMP_INPUT, 0
       value :WHIP_INPUT, 1
+      value :URL_INPUT, 2
     end
     add_enum "livekit.IngressAudioEncodingPreset" do
       value :OPUS_STEREO_96KBPS, 0

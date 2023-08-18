@@ -173,6 +173,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :status, :enum, 3, "livekit.EgressStatus"
       optional :started_at, :int64, 10
       optional :ended_at, :int64, 11
+      optional :updated_at, :int64, 18
       optional :error, :string, 9
       repeated :stream_results, :message, 15, "livekit.StreamInfo"
       repeated :file_results, :message, 16, "livekit.FileInfo"

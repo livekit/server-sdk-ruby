@@ -28,7 +28,9 @@ module LiveKit
       # optional, LiveKit::Proto::IngressVideoOptions
       video: nil,
       # optional, whether to forward input media unprocessed, for WHIP only
-      bypass_transcoding: nil
+      bypass_transcoding: nil,
+      # optional, needed for ingresses of type URL, provides the URL to fetch media from
+      url: nil
     )
       request = Proto::CreateIngressRequest.new(
         input_type: input_type,
@@ -39,6 +41,7 @@ module LiveKit
         audio: audio,
         video: video,
         bypass_transcoding: bypass_transcoding,
+        url: url,
       )
       self.rpc(
         :CreateIngress,
