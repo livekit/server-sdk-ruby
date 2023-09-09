@@ -18,7 +18,7 @@ module LiveKit
         max_participants: nil,
         egress: nil,
         metadata: nil,
-        min_playout_delay: nil,
+        min_playout_delay: nil
       )
       self.rpc(
         :CreateRoom,
@@ -128,7 +128,7 @@ module LiveKit
 
     def send_data(room:, data:, kind:,
         destination_sids: [],
-        destination_identities: [],
+        destination_identities: []
       )
       self.rpc(
         :SendData,

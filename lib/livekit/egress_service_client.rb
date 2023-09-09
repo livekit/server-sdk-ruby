@@ -57,7 +57,7 @@ module LiveKit
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
       # EncodingOptions, only one of preset or advanced could be set
-      advanced: nil,
+      advanced: nil
     )
       request = Proto::ParticipantEgressRequest.new(
         room_name: room_name,

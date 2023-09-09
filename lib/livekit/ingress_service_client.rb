@@ -88,7 +88,7 @@ module LiveKit
       # optional, filter by room name
       room_name: nil,
       # optional, list by ingress id
-      ingress_id: nil,
+      ingress_id: nil
     )
       request = Proto::ListIngressRequest.new(
         room_name: room_name,
