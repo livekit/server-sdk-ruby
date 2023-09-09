@@ -47,6 +47,33 @@ module LiveKit
       )
     end
 
+    def start_participant_egress(
+      room_name,
+      identity,
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
+      output,
+      # true to record the participant's screenshare and screenshare_audio track
+      screen_share: false,
+      # EncodingOptionsPreset, only one of preset or advanced could be set
+      preset: nil,
+      # EncodingOptions, only one of preset or advanced could be set
+      advanced: nil,
+    )
+      request = Proto::ParticipantEgressRequest.new(
+        room_name: room_name,
+        identity: identity,
+        screen_share: screen_share,
+        preset: preset,
+        advanced: advanced,
+      )
+      self.set_output(request, output)
+      self.rpc(
+        :StartParticipantEgress,
+        request,
+        headers: auth_header(roomRecord: true),
+      )
+    end
+
     def start_track_composite_egress(
       room_name,
       # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
@@ -157,11 +184,16 @@ module LiveKit
     # list all egress or only egress for a room
     def list_egress(
       room_name: nil,
+      egress_id: nil,
       active: false
     )
       self.rpc(
         :ListEgress,
-        Proto::ListEgressRequest.new(room_name: room_name, active: active),
+        Proto::ListEgressRequest.new(
+          room_name: room_name,
+          active: active,
+          egress_id: egress_id,
+        ),
         headers: auth_header(roomRecord: true),
       )
     end
