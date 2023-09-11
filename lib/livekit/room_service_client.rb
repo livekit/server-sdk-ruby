@@ -13,7 +13,13 @@ module LiveKit
       @api_secret = api_secret
     end
 
-    def create_room(name, empty_timeout: nil, max_participants: nil, egress: nil)
+    def create_room(name,
+        empty_timeout: nil,
+        max_participants: nil,
+        egress: nil,
+        metadata: nil,
+        min_playout_delay: nil
+      )
       self.rpc(
         :CreateRoom,
         Proto::CreateRoomRequest.new(
@@ -21,6 +27,8 @@ module LiveKit
           empty_timeout: empty_timeout,
           max_participants: max_participants,
           egress: egress,
+          metadata: metadata,
+          min_playout_delay: min_playout_delay,
         ),
         headers: auth_header(roomCreate: true),
       )
@@ -118,7 +126,10 @@ module LiveKit
       )
     end
 
-    def send_data(room:, data:, kind:, destination_sids: [])
+    def send_data(room:, data:, kind:,
+        destination_sids: [],
+        destination_identities: []
+      )
       self.rpc(
         :SendData,
         Proto::SendDataRequest.new(
@@ -126,6 +137,7 @@ module LiveKit
           data: data,
           kind: kind,
           destination_sids: destination_sids,
+          destination_identities: destination_identities,
         ),
         headers: auth_header(roomAdmin: true, room: room),
       )

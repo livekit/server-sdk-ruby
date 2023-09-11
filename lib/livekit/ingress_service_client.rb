@@ -84,9 +84,15 @@ module LiveKit
       )
     end
 
-    def list_ingress(room_name: nil)
+    def list_ingress(
+      # optional, filter by room name
+      room_name: nil,
+      # optional, list by ingress id
+      ingress_id: nil
+    )
       request = Proto::ListIngressRequest.new(
         room_name: room_name,
+        ingress_id: ingress_id,
       )
       self.rpc(
         :ListIngress,
