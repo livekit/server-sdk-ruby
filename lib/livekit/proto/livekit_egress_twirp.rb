@@ -14,6 +14,7 @@ module LiveKit
       rpc :StartTrackEgress, TrackEgressRequest, EgressInfo, :ruby_method => :start_track_egress
       rpc :UpdateLayout, UpdateLayoutRequest, EgressInfo, :ruby_method => :update_layout
       rpc :UpdateStream, UpdateStreamRequest, EgressInfo, :ruby_method => :update_stream
+      rpc :UpdateOutputs, UpdateOutputsRequest, EgressInfo, :ruby_method => :update_outputs
       rpc :ListEgress, ListEgressRequest, ListEgressResponse, :ruby_method => :list_egress
       rpc :StopEgress, StopEgressRequest, EgressInfo, :ruby_method => :stop_egress
     end
