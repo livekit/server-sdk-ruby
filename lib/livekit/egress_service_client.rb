@@ -15,7 +15,7 @@ module LiveKit
 
     def start_room_composite_egress(
       room_name,
-      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, ImageOutput or array containing up to one of each
       output,
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
@@ -50,7 +50,7 @@ module LiveKit
     def start_participant_egress(
       room_name,
       identity,
-      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, ImageOutput, or array containing up to one of each
       output,
       # true to record the participant's screenshare and screenshare_audio track
       screen_share: false,
@@ -76,7 +76,7 @@ module LiveKit
 
     def start_track_composite_egress(
       room_name,
-      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, ImageOutput, or array containing up to one of each
       output,
       # TrackID of an audio track
       audio_track_id: nil,
@@ -126,7 +126,7 @@ module LiveKit
 
     def start_web_egress(
       url,
-      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, or array containing up to one of each
+      # EncodedFileOutput, SegmentedFileOutput, StreamOutput, ImageOutput, or array containing up to one of each
       output,
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
@@ -222,6 +222,9 @@ module LiveKit
           elsif out.is_a? Livekit::Proto::StreamOutput
             raise "cannot add multiple stream outputs" if request.stream_outputs.any?
             request.stream_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::StreamOutput, [out])
+          elsif out.is_a? LiveKit::Proto::ImageOutput
+            raise "cannot add multiple image outputs" if request.image_outputs.any?
+            request.image_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::ImageOutput, [out])
           end
         end
       elsif output.is_a? LiveKit::Proto::EncodedFileOutput
@@ -233,6 +236,8 @@ module LiveKit
       elsif output.is_a? LiveKit::Proto::StreamOutput
         request.stream = output
         request.stream_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::StreamOutput, [output])
+      elsif output.is_a? LiveKit::Proto::ImageOutput
+        request.image_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::ImageOutput, [output])
       end
     end
   end
