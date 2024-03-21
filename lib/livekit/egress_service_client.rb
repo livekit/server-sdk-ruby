@@ -1,5 +1,6 @@
 require "livekit/proto/livekit_egress_twirp"
 require "livekit/auth_mixin"
+require 'livekit/utils'
 
 module LiveKit
   class EgressServiceClient < Twirp::Client
@@ -8,7 +9,7 @@ module LiveKit
     attr_accessor :api_key, :api_secret
 
     def initialize(base_url, api_key: nil, api_secret: nil)
-      super(File.join(base_url, "/twirp"))
+      super(File.join(to_http_url(base_url), "/twirp"))
       @api_key = api_key
       @api_secret = api_secret
     end
@@ -211,6 +212,9 @@ module LiveKit
     # helper that sets output to file or stream
     def set_output(request, output)
       raise "output cannot be nil" if output.nil?
+      # note: because we are setting the outputs fields here, instead of in the initialilzer
+      # we'll need to use the ugly Google::Protobuf::RepeatedField wrappers instead of
+      # a regular array
       if output.is_a? Array
         output.each do |out|
           if out.is_a? LiveKit::Proto::EncodedFileOutput
