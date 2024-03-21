@@ -212,6 +212,9 @@ module LiveKit
     # helper that sets output to file or stream
     def set_output(request, output)
       raise "output cannot be nil" if output.nil?
+      # note: because we are setting the outputs fields here, instead of in the initialilzer
+      # we'll need to use the ugly Google::Protobuf::RepeatedField wrappers instead of
+      # a regular array
       if output.is_a? Array
         output.each do |out|
           if out.is_a? LiveKit::Proto::EncodedFileOutput
