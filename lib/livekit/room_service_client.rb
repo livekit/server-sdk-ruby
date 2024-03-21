@@ -20,13 +20,15 @@ module LiveKit
         metadata: nil,
         min_playout_delay: nil,
         max_playout_delay: nil,
-        sync_streams: nil
+        sync_streams: nil,
+        departure_timeout: nil
       )
       self.rpc(
         :CreateRoom,
         Proto::CreateRoomRequest.new(
           name: name,
           empty_timeout: empty_timeout,
+          departure_timeout: departure_timeout,
           max_participants: max_participants,
           egress: egress,
           metadata: metadata,
