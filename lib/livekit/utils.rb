@@ -27,3 +27,13 @@ class ::Hash
     Hash[h]
   end
 end
+
+# convert websocket urls to http
+def to_http_url(url)
+  if url.start_with?("ws")
+    # replace ws prefix to http
+    return url.sub(/^ws/, "http")
+  else
+    return url
+  end
+end

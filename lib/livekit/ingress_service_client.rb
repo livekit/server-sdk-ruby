@@ -1,5 +1,6 @@
 require "livekit/proto/livekit_ingress_twirp"
 require "livekit/auth_mixin"
+require 'livekit/utils'
 
 module LiveKit
   class IngressServiceClient < Twirp::Client
@@ -8,7 +9,7 @@ module LiveKit
     attr_accessor :api_key, :api_secret
 
     def initialize(base_url, api_key: nil, api_secret: nil)
-      super(File.join(base_url, "/twirp"))
+      super(File.join(to_http_url(base_url), "/twirp"))
       @api_key = api_key
       @api_secret = api_secret
     end
