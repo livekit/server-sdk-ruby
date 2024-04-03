@@ -89,7 +89,7 @@ client.delete_room(room: name)
 require 'livekit'
 
 # starting a room composite to S3
-const egressClient = LiveKit::EgressServiceClient.new(
+egressClient = LiveKit::EgressServiceClient.new(
     "https://your-url",
     api_key: 'key',
     api_secret: 'secret'
