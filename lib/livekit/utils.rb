@@ -32,4 +32,3 @@ module LiveKit
     module_function :to_http_url
   end
 end
-# convert websocket urls to http
