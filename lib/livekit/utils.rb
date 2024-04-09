@@ -12,20 +12,6 @@ class ::Hash
     end
     Hash[h]
   end
-
-  # via https://stackoverflow.com/a/25835016/2257038
-  def symbol_keys
-    h = self.map do |k, v|
-      v_sym = if v.instance_of? Hash
-          v.symbol_keys
-        else
-          v
-        end
-
-      [k.to_sym, v_sym]
-    end
-    Hash[h]
-  end
 end
 
 # convert websocket urls to http
