@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "livekit/proto/livekit_egress_twirp"
 require "livekit/auth_mixin"
 require 'livekit/utils'

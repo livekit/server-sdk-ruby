@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 unless Hash.method_defined?(:stringify_keys)
   class Hash
     # via https://stackoverflow.com/a/25835016/2257038
