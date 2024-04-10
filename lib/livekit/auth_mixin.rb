@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LiveKit
   # Create authenticated headers when keys are provided
   module AuthMixin

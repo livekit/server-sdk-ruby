@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LiveKit
   class ClaimGrant
     attr_accessor :identity, :name, :metadata, :sha256, :video
