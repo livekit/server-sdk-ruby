@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "google-protobuf", ">= 3.21.0", "< 4.0"
   spec.add_dependency "jwt", ">= 2.2.3", "< 3.0"
   # workaround for twirp 1.10.0 missing it
-  spec.add_dependency 'rack', '>= 2.2.3', "< 3.0"
+  spec.add_dependency 'rack', '>= 2.2.3'
   spec.add_dependency "twirp", ">= 1.10.0", "< 2.0"
 
   # For more information and examples about making a new gem, checkout our
