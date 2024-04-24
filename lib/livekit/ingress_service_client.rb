@@ -70,10 +70,10 @@ module LiveKit
       # optional, LiveKit::Proto::IngressVideoOptions
       video: nil,
       # optional, whether to forward input media unprocessed, for WHIP only
-      bypass_transcoding: nil
+      bypass_transcoding: nil,
       # optional, whether to enable transcoding or forward the input media directly.
       # Transcoding is required for all input types except WHIP. For WHIP, the default is to not transcode.
-      enable_transcoding: nil,
+      enable_transcoding: nil
     )
       request = Proto::UpdateIngressRequest.new(
         ingress_id: ingress_id,
