@@ -88,7 +88,7 @@ module LiveKit
     def self.from_hash(hash)
       return nil if hash.nil?
 
-      hash = hash.stringify_keys
+      hash = hash.transform_keys(&:to_s)
 
       VideoGrant.new(
         roomCreate: hash["roomCreate"],
