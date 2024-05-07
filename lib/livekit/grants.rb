@@ -35,6 +35,8 @@ module LiveKit
   end
 
   class VideoGrant
+    using LiveKit::Utils::StringifyKeysRefinement
+
     attr_accessor :roomCreate, :roomJoin, :roomList, :roomRecord, :roomAdmin,
       :room, :canPublish, :canPublishSources, :canSubscribe, :canPublishData,
       :canUpdateOwnMetadata, :hidden, :recorder, :ingressAdmin
@@ -88,7 +90,7 @@ module LiveKit
     def self.from_hash(hash)
       return nil if hash.nil?
 
-      hash = hash.transform_keys(&:to_s)
+      hash = hash.stringify_keys
 
       VideoGrant.new(
         roomCreate: hash["roomCreate"],
