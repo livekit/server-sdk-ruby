@@ -35,6 +35,8 @@ module LiveKit
   end
 
   class VideoGrant
+    using LiveKit::Utils::StringifyKeysRefinement
+
     attr_accessor :roomCreate, :roomJoin, :roomList, :roomRecord, :roomAdmin,
       :room, :canPublish, :canPublishSources, :canSubscribe, :canPublishData,
       :canUpdateOwnMetadata, :hidden, :recorder, :ingressAdmin

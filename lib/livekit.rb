@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "livekit/access_token"
+require "livekit/utils"
 require "livekit/grants"
 require "livekit/token_verifier"
-require "livekit/utils"
 require "livekit/version"
 
 # required since generated protobufs does use `require` instead of `require_relative`
