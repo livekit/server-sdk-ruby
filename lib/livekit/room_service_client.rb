@@ -104,7 +104,14 @@ module LiveKit
       )
     end
 
-    def update_participant(room:, identity:, metadata: nil, permission: nil, name: nil)
+    def update_participant(
+        room:,
+        identity:,
+        metadata: nil,
+        permission: nil,
+        name: nil,
+        attributes: nil
+      )
       req = Proto::UpdateParticipantRequest.new(room: room, identity: identity)
       if metadata
         req.metadata = metadata
@@ -114,6 +121,13 @@ module LiveKit
       end
       if name
         req.name = name
+      end
+      if attributes
+        attr_map = Google::Protobuf::Map.new(:string, :string)
+        attributes.each do |k, v|
+          attr_map[k.to_s] = v.to_s
+        end
+        req.attributes = attr_map
       end
       self.rpc(
         :UpdateParticipant,
