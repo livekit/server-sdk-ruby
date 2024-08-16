@@ -225,7 +225,7 @@ module LiveKit
           elsif out.is_a? LiveKit::Proto::SegmentedFileOutput
             raise "cannot add multiple segmented file outputs" if request.segment_outputs.any?
             request.segment_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::SegmentedFileOutput, [out])
-          elsif out.is_a? Livekit::Proto::StreamOutput
+          elsif out.is_a? LiveKit::Proto::StreamOutput
             raise "cannot add multiple stream outputs" if request.stream_outputs.any?
             request.stream_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::StreamOutput, [out])
           elsif out.is_a? LiveKit::Proto::ImageOutput
