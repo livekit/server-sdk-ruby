@@ -12,6 +12,8 @@ task :proto do
          "--ruby_out=lib/livekit/proto",
          "--twirp_ruby_out=lib/livekit/proto",
          "-Iprotocol",
+         "./protocol/protobufs/livekit_agent.proto",
+         "./protocol/protobufs/livekit_agent_dispatch.proto",
          "./protocol/protobufs/livekit_egress.proto",
          "./protocol/protobufs/livekit_ingress.proto",
          "./protocol/protobufs/livekit_sip.proto",

@@ -2,7 +2,7 @@
 
 module LiveKit
   class ClaimGrant
-    attr_accessor :identity, :name, :metadata, :sha256, :video
+    attr_accessor :identity, :name, :metadata, :sha256, :video, :sip, :attributes
 
     def self.from_hash(hash)
       return nil if hash.nil?
@@ -11,8 +11,10 @@ module LiveKit
       claim_grant.identity = hash["sub"]
       claim_grant.name = hash["name"]
       claim_grant.metadata = hash["metadata"]
+      claim_grant.attributes = hash["attributes"]
       claim_grant.sha256 = hash["sha256"]
       claim_grant.video = VideoGrant.from_hash(hash["video"])
+      claim_grant.sip = SIPGrant.from_hash(hash["sip"])
       return claim_grant
     end
 
@@ -22,15 +24,24 @@ module LiveKit
       @metadata = nil
       @sha256 = nil
       @video = nil
+      @sip = nil
+      @attributes = nil
     end
 
     def to_hash
-      {
+      val = {
         name: @name,
         metadata: @metadata,
+        attributes: @attributes,
         sha256: @sha256,
-        video: @video.to_hash,
       }
+      if @video
+        val[:video] = @video.to_hash
+      end
+      if @sip
+        val[:sip] = @sip.to_hash
+      end
+      return val
     end
   end
 
@@ -107,6 +118,44 @@ module LiveKit
         hidden: hash["hidden"],
         recorder: hash["recorder"],
         ingressAdmin: hash["ingressAdmin"]
+      )
+    end
+
+    def to_hash
+      hash = {}
+      instance_variables.each { |var|
+        val = instance_variable_get(var)
+        if val != nil
+          hash[var.to_s.delete("@")] = val
+        end
+      }
+      hash
+    end
+  end
+
+  class SIPGrant
+    using LiveKit::Utils::StringifyKeysRefinement
+
+    attr_accessor :admin, :call
+
+    def initialize(
+      # true if can access SIP features
+      admin: nil,
+      # true if can make outgoing call
+      call: nil
+    )
+      @admin = admin
+      @call = call
+    end
+
+    def self.from_hash(hash)
+      return nil if hash.nil?
+
+      hash = hash.stringify_keys
+
+      SIPGrant.new(
+        admin: hash["admin"],
+        call: hash["call"]
       )
     end
 

@@ -4,20 +4,29 @@ require "jwt"
 
 module LiveKit
   class AccessToken
-    # 6 hours in seconds; how long the access token to the server is good for
-    DEFAULT_TTL = 14_400
+    # 10 minutes in seconds; how long the access token to the server is good for
+    DEFAULT_TTL = 600
 
     # The signing algorithm used by the {jwt} gem internals
     SIGNING_ALGORITHM = "HS256"
 
     attr_accessor :grants, :identity
 
-    def initialize(api_key: nil, api_secret: nil, identity: nil, ttl: DEFAULT_TTL, name: nil, metadata: nil)
+    def initialize(
+        api_key: nil,
+        api_secret: nil,
+        identity: nil,
+        ttl: DEFAULT_TTL,
+        name: nil,
+        metadata: nil,
+        attributes: nil
+      )
       @api_key = api_key || ENV["LIVEKIT_API_KEY"]
       @api_secret = api_secret || ENV["LIVEKIT_API_SECRET"]
       @grants = ClaimGrant.new
       @grants.name = name
       @grants.metadata = metadata
+      @grants.attributes = attributes
       @identity = identity
       @ttl = ttl
     end
@@ -27,6 +36,13 @@ module LiveKit
         video_grant = VideoGrant.from_hash(video_grant)
       end
       @grants.video = video_grant
+    end
+
+    def add_sip_grant(sip_grant)
+      if sip_grant.is_a?(Hash)
+        sip_grant = SIPGrant.from_hash(sip_grant)
+      end
+      @grants.sip = sip_grant
     end
 
     def metadata=(participant_md)
@@ -46,8 +62,8 @@ module LiveKit
     end
 
     def to_jwt
-      if @grants.video.nil?
-        raise ArgumentError, "VideoGrant is required"
+      if @grants.video.nil? && @grants.sip.nil?
+        raise ArgumentError, "VideoGrant or SIPGrant is required"
       end
 
       jwt_timestamp = Time.now.to_i
@@ -59,6 +75,7 @@ module LiveKit
         iss: @api_key,
         sub: @identity,
       })
+      payload.compact!
 
       return JWT.encode(payload, @api_secret, SIGNING_ALGORITHM)
     end
