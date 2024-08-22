@@ -42,7 +42,7 @@ module LiveKit
         audio_only: audio_only,
         video_only: video_only,
       )
-      self.set_output(request, output)
+      set_output(request, output)
       self.rpc(
         :StartRoomCompositeEgress,
         request,
@@ -69,7 +69,7 @@ module LiveKit
         preset: preset,
         advanced: advanced,
       )
-      self.set_output(request, output)
+      set_output(request, output)
       self.rpc(
         :StartParticipantEgress,
         request,
@@ -97,7 +97,7 @@ module LiveKit
         audio_track_id: audio_track_id,
         video_track_id: video_track_id,
       )
-      self.set_output(request, output)
+      set_output(request, output)
       self.rpc(
         :StartTrackCompositeEgress,
         request,
