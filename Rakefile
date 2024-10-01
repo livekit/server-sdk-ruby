@@ -17,6 +17,7 @@ task :proto do
          "./protocol/protobufs/livekit_egress.proto",
          "./protocol/protobufs/livekit_ingress.proto",
          "./protocol/protobufs/livekit_sip.proto",
+         "./protocol/protobufs/livekit_metrics.proto",
          "./protocol/protobufs/livekit_models.proto",
          "./protocol/protobufs/livekit_room.proto",
          "./protocol/protobufs/livekit_webhook.proto")
