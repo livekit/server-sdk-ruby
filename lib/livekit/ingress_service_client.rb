@@ -51,7 +51,7 @@ module LiveKit
       self.rpc(
         :CreateIngress,
         request,
-        headers: auth_header(ingressAdmin: true),
+        headers: auth_header(VideoGrant.new(ingressAdmin: true)),
       )
     end
 
@@ -89,7 +89,7 @@ module LiveKit
       self.rpc(
         :UpdateIngress,
         request,
-        headers: auth_header(ingressAdmin: true),
+        headers: auth_header(VideoGrant.new(ingressAdmin: true)),
       )
     end
 
@@ -106,7 +106,7 @@ module LiveKit
       self.rpc(
         :ListIngress,
         request,
-        headers: auth_header(ingressAdmin: true),
+        headers: auth_header(VideoGrant.new(ingressAdmin: true)),
       )
     end
 
@@ -117,7 +117,7 @@ module LiveKit
       self.rpc(
         :DeleteIngress,
         request,
-        headers: auth_header(ingressAdmin: true),
+        headers: auth_header(VideoGrant.new(ingressAdmin: true)),
       )
     end
   end

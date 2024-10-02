@@ -49,7 +49,7 @@ module LiveKit
       self.rpc(
         :CreateSIPInboundTrunk,
         request,
-        headers: auth_header(nil, SIPGrant(admin: true)),
+        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
       )
     end
 
@@ -88,7 +88,7 @@ module LiveKit
       self.rpc(
         :CreateSIPOutboundTrunk,
         request,
-        headers: auth_header(nil, SIPGrant(admin: true)),
+        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
       )
     end
   end
