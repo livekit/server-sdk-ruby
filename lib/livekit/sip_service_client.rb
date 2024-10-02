@@ -145,5 +145,25 @@ module LiveKit
         headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
       )
     end
+
+    def list_sip_dispatch_rule
+      request = Proto::ListSIPDispatchRuleRequest.new
+      self.rpc(
+        :ListSIPDispatchRule,
+        request,
+        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
+
+    def delete_sip_dispatch_rule(sip_dispatch_rule_id)
+      request = Proto::DeleteSIPDispatchRuleRequest.new(
+        sip_dispatch_rule_id: sip_dispatch_rule_id,
+      )
+      self.rpc(
+        :DeleteSIPDispatchRule,
+        request,
+        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
   end
 end
