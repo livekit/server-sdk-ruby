@@ -194,5 +194,23 @@ module LiveKit
         headers: auth_header(nil, sip_grant: SIPGrant.new(call: true)),
       )
     end
+
+    def transfer_sip_participant(
+      room_name,
+      participant_identity,
+      transfer_to
+    )
+
+      request = Proto::TransferSIPParticipantRequest.new(
+        room_name: room_name,
+        participant_identity: participant_identity,
+        transfer_to: transfer_to,
+      )
+      self.rpc(
+        :TransferSIPParticipant,
+        request,
+        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room_name), sip_grant: SIPGrant.new(call: true)),
+      )
+    end
   end
 end
