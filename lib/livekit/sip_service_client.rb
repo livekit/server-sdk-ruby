@@ -165,5 +165,34 @@ module LiveKit
         headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
       )
     end
+
+    def create_sip_participant(
+      sip_trunk_id,
+      sip_call_to,
+      room_name,
+      participant_identity: nil,
+      participant_name: nil,
+      participant_metadata: nil,
+      dtmf: nil,
+      play_ringtone: nil,
+      hide_phone_number: nil
+    )
+      request = Proto::CreateSIPParticipantRequest.new(
+        sip_trunk_id: sip_trunk_id,
+        sip_call_to: sip_call_to,
+        room_name: room_name,
+        participant_identity: participant_identity,
+        participant_name: participant_name,
+        participant_metadata: participant_metadata,
+        dtmf: dtmf,
+        play_ringtone: play_ringtone,
+        hide_phone_number: hide_phone_number,
+      )
+      self.rpc(
+        :CreateSIPParticipant,
+        request,
+        headers: auth_header(nil, sip_grant: SIPGrant.new(call: true)),
+      )
+    end
   end
 end
