@@ -91,5 +91,59 @@ module LiveKit
         headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
       )
     end
+
+    def list_sip_inbound_trunk
+      request = Proto::ListSIPInboundTrunkRequest.new
+      self.rpc(
+        :ListSIPInboundTrunk,
+        request,
+        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
+
+    def list_sip_outbound_trunk
+      request = Proto::ListSIPOutboundTrunkRequest.new
+      self.rpc(
+        :ListSIPOutboundTrunk,
+        request,
+        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
+
+    def delete_sip_trunk(sip_trunk_id)
+      request = Proto::DeleteSIPTrunkRequest.new(
+        sip_trunk_id: sip_trunk_id,
+      )
+      self.rpc(
+        :DeleteSIPTrunk,
+        request,
+        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
+
+    def create_sip_dispatch_rule(
+      rule,
+      name: nil,
+      trunk_ids: nil,
+      inbound_numbers: nil,
+      hide_phone_number: nil,
+      metadata: nil,
+      attributes: nil
+    )
+      request = Proto::CreateSIPDispatchRuleRequest.new(
+        rule: rule,
+        name: name,
+        trunk_ids: trunk_ids,
+        inbound_numbers: inbound_numbers,
+        hide_phone_number: hide_phone_number,
+        metadata: metadata,
+        attributes: attributes,
+      )
+      self.rpc(
+        :CreateSIPDispatchRule,
+        request,
+        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
   end
 end
