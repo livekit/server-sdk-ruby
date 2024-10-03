@@ -4,12 +4,14 @@ module LiveKit
   # Create authenticated headers when keys are provided
   module AuthMixin
     def auth_header(
-      video_grant,
+      video_grant: nil,
       sip_grant: nil
     )
       headers = {}
       t = ::LiveKit::AccessToken.new(api_key: @api_key, api_secret: @api_secret)
-      t.add_grant(video_grant)
+      if video_grant != nil
+        t.add_grant(video_grant)
+      end
       if sip_grant != nil
         t.add_sip_grant(sip_grant)
       end

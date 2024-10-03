@@ -46,7 +46,7 @@ module LiveKit
       self.rpc(
         :StartRoomCompositeEgress,
         request,
-        headers: auth_header(VideoGrant.new(roomRecord: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
       )
     end
 
@@ -73,7 +73,7 @@ module LiveKit
       self.rpc(
         :StartParticipantEgress,
         request,
-        headers: auth_header(VideoGrant.new(roomRecord: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
       )
     end
 
@@ -101,7 +101,7 @@ module LiveKit
       self.rpc(
         :StartTrackCompositeEgress,
         request,
-        headers: auth_header(VideoGrant.new(roomRecord: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
       )
     end
 
@@ -123,7 +123,7 @@ module LiveKit
       self.rpc(
         :StartTrackEgress,
         request,
-        headers: auth_header(VideoGrant.new(roomRecord: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
       )
     end
 
@@ -154,7 +154,7 @@ module LiveKit
       self.rpc(
         :StartWebEgress,
         request,
-        headers: auth_header(VideoGrant.new(roomRecord: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
       )
     end
 
@@ -165,7 +165,7 @@ module LiveKit
           egress_id: egress_id,
           layout: layout,
         ),
-        headers: auth_header(VideoGrant.new(roomRecord: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
       )
     end
 
@@ -180,7 +180,7 @@ module LiveKit
           add_output_urls: add_output_urls,
           remove_output_urls: remove_output_urls,
         ),
-        headers: auth_header(VideoGrant.new(roomRecord: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
       )
     end
 
@@ -197,7 +197,7 @@ module LiveKit
           active: active,
           egress_id: egress_id,
         ),
-        headers: auth_header(VideoGrant.new(roomRecord: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
       )
     end
 
@@ -205,7 +205,7 @@ module LiveKit
       self.rpc(
         :StopEgress,
         Proto::StopEgressRequest.new(egress_id: egress_id),
-        headers: auth_header(VideoGrant.new(roomRecord: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
       )
     end
 

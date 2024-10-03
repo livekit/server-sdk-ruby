@@ -49,7 +49,7 @@ module LiveKit
       self.rpc(
         :CreateSIPInboundTrunk,
         request,
-        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
       )
     end
 
@@ -88,7 +88,7 @@ module LiveKit
       self.rpc(
         :CreateSIPOutboundTrunk,
         request,
-        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
       )
     end
 
@@ -97,7 +97,7 @@ module LiveKit
       self.rpc(
         :ListSIPInboundTrunk,
         request,
-        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
       )
     end
 
@@ -106,7 +106,7 @@ module LiveKit
       self.rpc(
         :ListSIPOutboundTrunk,
         request,
-        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
       )
     end
 
@@ -117,7 +117,7 @@ module LiveKit
       self.rpc(
         :DeleteSIPTrunk,
         request,
-        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
       )
     end
 
@@ -142,7 +142,7 @@ module LiveKit
       self.rpc(
         :CreateSIPDispatchRule,
         request,
-        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
       )
     end
 
@@ -151,7 +151,7 @@ module LiveKit
       self.rpc(
         :ListSIPDispatchRule,
         request,
-        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
       )
     end
 
@@ -162,7 +162,7 @@ module LiveKit
       self.rpc(
         :DeleteSIPDispatchRule,
         request,
-        headers: auth_header(nil, sip_grant: SIPGrant.new(admin: true)),
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
       )
     end
 
@@ -191,7 +191,7 @@ module LiveKit
       self.rpc(
         :CreateSIPParticipant,
         request,
-        headers: auth_header(nil, sip_grant: SIPGrant.new(call: true)),
+        headers: auth_header(sip_grant: SIPGrant.new(call: true)),
       )
     end
 
@@ -209,7 +209,7 @@ module LiveKit
       self.rpc(
         :TransferSIPParticipant,
         request,
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room_name), sip_grant: SIPGrant.new(call: true)),
+        headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name), sip_grant: SIPGrant.new(call: true)),
       )
     end
   end

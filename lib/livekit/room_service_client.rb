@@ -39,7 +39,7 @@ module LiveKit
           max_playout_delay: max_playout_delay,
           sync_streams: sync_streams
         ),
-        headers: auth_header(VideoGrant.new(roomCreate: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomCreate: true)),
       )
     end
 
@@ -47,7 +47,7 @@ module LiveKit
       self.rpc(
         :ListRooms,
         Proto::ListRoomsRequest.new(names: names),
-        headers: auth_header(VideoGrant.new(roomList: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomList: true)),
       )
     end
 
@@ -55,7 +55,7 @@ module LiveKit
       self.rpc(
         :DeleteRoom,
         Proto::DeleteRoomRequest.new(room: room),
-        headers: auth_header(VideoGrant.new(roomCreate: true)),
+        headers:auth_header(video_grant: VideoGrant.new(roomCreate: true)),
       )
     end
 
@@ -63,7 +63,7 @@ module LiveKit
       self.rpc(
         :UpdateRoomMetadata,
         Proto::UpdateRoomMetadataRequest.new(room: room, metadata: metadata),
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room)),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
     end
 
@@ -71,7 +71,7 @@ module LiveKit
       self.rpc(
         :ListParticipants,
         Proto::ListParticipantsRequest.new(room: room),
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room)),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
     end
 
@@ -79,7 +79,7 @@ module LiveKit
       self.rpc(
         :GetParticipant,
         Proto::RoomParticipantIdentity.new(room: room, identity: identity),
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room)),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
     end
 
@@ -87,7 +87,7 @@ module LiveKit
       self.rpc(
         :RemoveParticipant,
         Proto::RoomParticipantIdentity.new(room: room, identity: identity),
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room)),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
     end
 
@@ -100,7 +100,7 @@ module LiveKit
           track_sid: track_sid,
           muted: muted,
         ),
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room)),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
     end
 
@@ -132,7 +132,7 @@ module LiveKit
       self.rpc(
         :UpdateParticipant,
         req,
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room)),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
     end
 
@@ -145,7 +145,7 @@ module LiveKit
           track_sids: track_sids,
           subscribe: subscribe,
         ),
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room)),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
     end
 
@@ -162,7 +162,7 @@ module LiveKit
           destination_sids: destination_sids,
           destination_identities: destination_identities,
         ),
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room)),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
     end
   end
