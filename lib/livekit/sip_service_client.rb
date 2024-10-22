@@ -174,9 +174,16 @@ module LiveKit
       participant_name: nil,
       participant_metadata: nil,
       dtmf: nil,
-      play_ringtone: nil,
+      play_ringtone: nil, # deprecated, use play_dialtone
+      play_dialtone: nil,
       hide_phone_number: nil
     )
+
+      if (play_ringtone == true || play_dialtone == true)
+        play_dialtone = true
+        play_ringtone = true
+      end
+
       request = Proto::CreateSIPParticipantRequest.new(
         sip_trunk_id: sip_trunk_id,
         sip_call_to: sip_call_to,
@@ -186,6 +193,7 @@ module LiveKit
         participant_metadata: participant_metadata,
         dtmf: dtmf,
         play_ringtone: play_ringtone,
+        play_dialtone: play_dialtone,
         hide_phone_number: hide_phone_number,
       )
       self.rpc(
@@ -198,13 +206,15 @@ module LiveKit
     def transfer_sip_participant(
       room_name,
       participant_identity,
-      transfer_to
+      transfer_to,
+      play_dialtone: nil
     )
 
       request = Proto::TransferSIPParticipantRequest.new(
         room_name: room_name,
         participant_identity: participant_identity,
         transfer_to: transfer_to,
+        play_dialtone: play_dialtone,
       )
       self.rpc(
         :TransferSIPParticipant,
