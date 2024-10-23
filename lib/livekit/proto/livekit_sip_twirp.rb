@@ -7,7 +7,6 @@ module LiveKit
     class SIPService < ::Twirp::Service
       package 'livekit'
       service 'SIP'
-      rpc :CreateSIPTrunk, CreateSIPTrunkRequest, SIPTrunkInfo, :ruby_method => :create_s_i_p_trunk
       rpc :ListSIPTrunk, ListSIPTrunkRequest, ListSIPTrunkResponse, :ruby_method => :list_s_i_p_trunk
       rpc :CreateSIPInboundTrunk, CreateSIPInboundTrunkRequest, SIPInboundTrunkInfo, :ruby_method => :create_s_i_p_inbound_trunk
       rpc :CreateSIPOutboundTrunk, CreateSIPOutboundTrunkRequest, SIPOutboundTrunkInfo, :ruby_method => :create_s_i_p_outbound_trunk
