@@ -10,7 +10,7 @@ module LiveKit
       headers = {}
       t = ::LiveKit::AccessToken.new(api_key: @api_key, api_secret: @api_secret)
       if video_grant != nil
-        t.set_sip_grant(video_grant)
+        t.set_video_grant(video_grant)
       end
       if sip_grant != nil
         t.set_sip_grant(sip_grant)
