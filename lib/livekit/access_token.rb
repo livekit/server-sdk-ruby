@@ -31,6 +31,7 @@ module LiveKit
       @ttl = ttl
     end
 
+    # Deprecated, use set_video_grant instead
     def add_grant(video_grant)
       if video_grant.is_a?(Hash)
         video_grant = VideoGrant.from_hash(video_grant)
@@ -42,6 +43,7 @@ module LiveKit
       @grants.video = video_grant
     end
 
+    # Deprecated, use set_sip_grant instead
     def add_sip_grant(sip_grant)
       if sip_grant.is_a?(Hash)
         sip_grant = SIPGrant.from_hash(sip_grant)
