@@ -6,6 +6,7 @@ RSpec.describe LiveKit::TokenVerifier do
                                      identity: "user")
     token.name = "name"
     token.set_video_grant LiveKit::VideoGrant.new(roomJoin: true, room: "testroom")
+    token.attributes = { "mykey" => "myvalue" }
     jwt = token.to_jwt
     v = described_class.new(api_key: TEST_KEY, api_secret: TEST_SECRET)
     grant = v.verify(jwt)
@@ -13,6 +14,7 @@ RSpec.describe LiveKit::TokenVerifier do
     expect(grant.video.room).to eq("testroom")
     expect(grant.name).to eq("name")
     expect(grant.identity).to eq("user")
+    expect(grant.attributes["mykey"]).to eq("myvalue")
   end
 
   it "fails on expired tokens" do
