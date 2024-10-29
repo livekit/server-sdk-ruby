@@ -11,7 +11,9 @@
 # LiveKit Server API for Ruby
 
 <!--BEGIN_DESCRIPTION-->
+
 Use this SDK to interact with <a href="https://livekit.io/">LiveKit</a> server APIs and create access tokens from your Ruby backend.
+
 <!--END_DESCRIPTION-->
 
 This library is designed to work with Ruby 2.6.0 and above.
@@ -46,8 +48,8 @@ require 'livekit'
 token = LiveKit::AccessToken.new(api_key: 'yourkey', api_secret: 'yoursecret')
 token.identity = 'participant-identity'
 token.name = 'participant-name'
-token.add_grant(roomJoin: true, room: 'room-name')
-
+token.set_video_grant(LiveKit::VideoGrant.new(roomJoin: true, room: 'room-name'))
+token.attributes = { "mykey" => "myvalue" }
 puts token.to_jwt
 ```
 
@@ -136,7 +138,9 @@ You may store credentials in environment variables. If api-key or api-secret is 
 The gem is available as open source under the terms of Apache 2.0 License.
 
 <!--BEGIN_REPO_NAV-->
+
 <br/><table>
+
 <thead><tr><th colspan="2">LiveKit Ecosystem</th></tr></thead>
 <tbody>
 <tr><td>Realtime SDKs</td><td><a href="https://github.com/livekit/components-js">React Components</a> · <a href="https://github.com/livekit/client-sdk-js">Browser</a> · <a href="https://github.com/livekit/components-swift">Swift Components</a> · <a href="https://github.com/livekit/client-sdk-swift">iOS/macOS/visionOS</a> · <a href="https://github.com/livekit/client-sdk-android">Android</a> · <a href="https://github.com/livekit/client-sdk-flutter">Flutter</a> · <a href="https://github.com/livekit/client-sdk-react-native">React Native</a> · <a href="https://github.com/livekit/rust-sdks">Rust</a> · <a href="https://github.com/livekit/node-sdks">Node.js</a> · <a href="https://github.com/livekit/python-sdks">Python</a> · <a href="https://github.com/livekit/client-sdk-unity-web">Unity (web)</a> · <a href="https://github.com/livekit/client-sdk-unity">Unity (beta)</a></td></tr><tr></tr>
@@ -147,4 +151,3 @@ The gem is available as open source under the terms of Apache 2.0 License.
 </tbody>
 </table>
 <!--END_REPO_NAV-->
-
