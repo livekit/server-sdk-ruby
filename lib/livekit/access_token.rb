@@ -35,6 +35,10 @@ module LiveKit
       if video_grant.is_a?(Hash)
         video_grant = VideoGrant.from_hash(video_grant)
       end
+      self.set_video_grant(video_grant)
+    end
+
+    def set_video_grant(video_grant)
       @grants.video = video_grant
     end
 
@@ -42,11 +46,19 @@ module LiveKit
       if sip_grant.is_a?(Hash)
         sip_grant = SIPGrant.from_hash(sip_grant)
       end
+      self.set_sip_grant(sip_grant)
+    end
+
+    def set_sip_grant(sip_grant)
       @grants.sip = sip_grant
     end
 
     def metadata=(participant_md)
       @grants.metadata = participant_md
+    end
+
+    def attributes=(participant_attributes)
+      @grants.attributes = participant_attributes
     end
 
     def name=(participant_name)
