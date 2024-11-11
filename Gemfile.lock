@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    livekit-server-sdk (0.7.0)
+    livekit-server-sdk (0.8.0)
       google-protobuf (>= 3.21.0, < 4.0)
       jwt (>= 2.2.3, < 3.0)
       rack (>= 2.2.3)
@@ -19,10 +19,9 @@ GEM
     faraday-net_http (3.1.1)
       net-http
     google-protobuf (3.25.4)
-    google-protobuf (3.25.4-x86_64-linux)
     jwt (2.8.2)
       base64
-    logger (1.6.0)
+    logger (1.6.1)
     method_source (1.0.0)
     net-http (0.4.1)
       uri

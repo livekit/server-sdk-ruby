@@ -48,7 +48,7 @@ require 'livekit'
 token = LiveKit::AccessToken.new(api_key: 'yourkey', api_secret: 'yoursecret')
 token.identity = 'participant-identity'
 token.name = 'participant-name'
-token.set_video_grant(LiveKit::VideoGrant.new(roomJoin: true, room: 'room-name'))
+token.video_grant = LiveKit::VideoGrant.new(roomJoin: true, room: 'room-name')
 token.attributes = { "mykey" => "myvalue" }
 puts token.to_jwt
 ```

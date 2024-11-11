@@ -31,27 +31,27 @@ module LiveKit
       @ttl = ttl
     end
 
-    # Deprecated, use set_video_grant instead
+    # Deprecated, use video_grant = instead
     def add_grant(video_grant)
       if video_grant.is_a?(Hash)
         video_grant = VideoGrant.from_hash(video_grant)
       end
-      self.set_video_grant(video_grant)
+      self.video_grant = video_grant
     end
 
-    def set_video_grant(video_grant)
+    def video_grant=(video_grant)
       @grants.video = video_grant
     end
 
-    # Deprecated, use set_sip_grant instead
+    # Deprecated, use sip_grant = instead
     def add_sip_grant(sip_grant)
       if sip_grant.is_a?(Hash)
         sip_grant = SIPGrant.from_hash(sip_grant)
       end
-      self.set_sip_grant(sip_grant)
+      self.sip_grant = sip_grant
     end
 
-    def set_sip_grant(sip_grant)
+    def sip_grant=(sip_grant)
       @grants.sip = sip_grant
     end
 
@@ -73,6 +73,14 @@ module LiveKit
 
     def sha256=(sha_string)
       @grants.sha256 = sha_string
+    end
+
+    def room_config=(room_config)
+      @grants.room_config = room_config
+    end
+
+    def room_preset=(room_preset)
+      @grants.room_preset = room_preset
     end
 
     def to_jwt

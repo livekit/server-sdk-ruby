@@ -2,7 +2,7 @@
 
 module LiveKit
   class ClaimGrant
-    attr_accessor :identity, :name, :metadata, :sha256, :video, :sip, :attributes
+    attr_accessor :identity, :name, :metadata, :sha256, :video, :sip, :attributes, :room_preset, :room_config
 
     def self.from_hash(hash)
       return nil if hash.nil?
@@ -15,6 +15,11 @@ module LiveKit
       claim_grant.sha256 = hash["sha256"]
       claim_grant.video = VideoGrant.from_hash(hash["video"])
       claim_grant.sip = SIPGrant.from_hash(hash["sip"])
+      claim_grant.room_preset = hash["roomPreset"]
+      if hash["roomConfig"]
+        # re-hydrate from JSON to ensure it can parse camelCase fields correctly
+        claim_grant.room_config = Proto::RoomConfiguration.decode_json(hash["roomConfig"].to_json)
+      end
       return claim_grant
     end
 
@@ -26,6 +31,8 @@ module LiveKit
       @video = nil
       @sip = nil
       @attributes = nil
+      @room_preset = nil
+      @room_config = nil
     end
 
     def to_hash
@@ -40,6 +47,12 @@ module LiveKit
       end
       if @sip
         val[:sip] = @sip.to_hash
+      end
+      if @room_preset
+        val[:roomPreset] = @room_preset
+      end
+      if @room_config
+        val[:roomConfig] = JSON.parse(@room_config.to_json)
       end
       return val
     end
