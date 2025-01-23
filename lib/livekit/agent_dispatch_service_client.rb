@@ -37,7 +37,7 @@ module LiveKit
       self.rpc(
         :CreateDispatch,
         request,
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room_name)),
+        headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name)),
       )
     end
 
