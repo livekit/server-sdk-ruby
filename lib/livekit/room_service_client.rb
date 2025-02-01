@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require 'securerandom'
 require "livekit/proto/livekit_room_twirp"
 require "livekit/auth_mixin"
 require 'livekit/utils'
+
 
 module LiveKit
   class RoomServiceClient < Twirp::Client
@@ -161,6 +163,7 @@ module LiveKit
           kind: kind,
           destination_sids: destination_sids,
           destination_identities: destination_identities,
+          nonce: SecureRandom.random_bytes(16)
         ),
         headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
