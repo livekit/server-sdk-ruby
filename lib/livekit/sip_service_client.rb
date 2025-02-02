@@ -128,7 +128,8 @@ module LiveKit
       inbound_numbers: nil,
       hide_phone_number: nil,
       metadata: nil,
-      attributes: nil
+      attributes: nil,
+      room_config: nil
     )
       request = Proto::CreateSIPDispatchRuleRequest.new(
         rule: rule,
@@ -138,6 +139,7 @@ module LiveKit
         hide_phone_number: hide_phone_number,
         metadata: metadata,
         attributes: attributes,
+        room_config: room_config,
       )
       self.rpc(
         :CreateSIPDispatchRule,
