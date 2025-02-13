@@ -30,8 +30,12 @@ module LiveKit
       auth_password: nil,
       # optional, include these SIP X-* headers in 200 OK responses.
       headers: nil,
-      # optional map SIP X-* headers from INVITE to SIP participant attributes.
-      headers_to_attributes: nil
+      # optional, map SIP X-* headers from INVITE to SIP participant attributes.
+      headers_to_attributes: nil,
+      # optional, map SIP response headers from INVITE to sip.h.* participant attributes automatically.
+      include_headers: Proto::SIPHeaderOptions::SIP_NO_HEADERS,
+      # optional, enable Krisp for this trunk
+      krisp_enabled: false
     )
       request = Proto::CreateSIPInboundTrunkRequest.new(
         trunk: Proto::SIPInboundTrunkInfo.new(
@@ -43,7 +47,9 @@ module LiveKit
           auth_username: auth_username,
           auth_password: auth_password,
           headers: headers,
-          headers_to_attributes: headers_to_attributes
+          headers_to_attributes: headers_to_attributes,
+          include_headers: include_headers,
+          krisp_enabled: krisp_enabled
         )
       )
       self.rpc(
@@ -172,31 +178,42 @@ module LiveKit
       sip_trunk_id,
       sip_call_to,
       room_name,
+      # Optional SIP From number to use. If empty, trunk number is used.
+      from_number: nil,
+      # Optional identity of the participant in LiveKit room
       participant_identity: nil,
+      # Optional name of the participant in LiveKit room
       participant_name: nil,
+      # Optional metadata of the participant in LiveKit room
       participant_metadata: nil,
+      # Optional, send following DTMF digits (extension codes) when making a call.
+      # Character 'w' can be used to add a 0.5 sec delay.
       dtmf: nil,
-      play_ringtone: nil, # deprecated, use play_dialtone
-      play_dialtone: nil,
-      hide_phone_number: nil
+      # Optional, play dialtone for the participant
+      play_dialtone: false,
+      # Optional, hide phone number from participant attributes
+      hide_phone_number: nil,
+      # Optional, ringing timeout in seconds
+      ringing_timeout: nil,
+      # Optional, max call duration in seconds
+      max_call_duration: nil,
+      # Optional, enable Krisp for this call
+      krisp_enabled: false
     )
-
-      if (play_ringtone == true || play_dialtone == true)
-        play_dialtone = true
-        play_ringtone = true
-      end
-
       request = Proto::CreateSIPParticipantRequest.new(
         sip_trunk_id: sip_trunk_id,
         sip_call_to: sip_call_to,
+        sip_number: from_number,
         room_name: room_name,
         participant_identity: participant_identity,
         participant_name: participant_name,
         participant_metadata: participant_metadata,
         dtmf: dtmf,
-        play_ringtone: play_ringtone,
         play_dialtone: play_dialtone,
         hide_phone_number: hide_phone_number,
+        ringing_timeout: ringing_timeout,
+        max_call_duration: max_call_duration,
+        krisp_enabled: krisp_enabled
       )
       self.rpc(
         :CreateSIPParticipant,
