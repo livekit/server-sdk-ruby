@@ -26,11 +26,9 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "google-protobuf", ">= 3.21.0", "< 4.0"
+  spec.add_dependency "google-protobuf", "~> 4.30", ">= 4.30.2"
   spec.add_dependency "jwt", ">= 2.2.3", "< 3.0"
-  # workaround for twirp 1.10.0 missing it
-  spec.add_dependency 'rack', '>= 2.2.3'
-  spec.add_dependency "twirp", ">= 1.10.0", "< 2.0"
+  spec.add_dependency "twirp", "~> 1.13", ">= 1.13.1"
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
