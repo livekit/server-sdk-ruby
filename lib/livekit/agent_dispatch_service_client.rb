@@ -5,8 +5,8 @@ require 'livekit/utils'
 module LiveKit
   # Client for LiveKit's Agent Dispatch Service, which manages agent assignments to rooms
   # This client handles creating, deleting, and retrieving agent dispatches
-  class AgentDispatchServiceClient < Twirp::Client
-    client_for Proto::AgentDispatchServiceService
+  class AgentDispatchClient < Twirp::Client
+    client_for Proto::AgentDispatchService
     include AuthMixin
     attr_accessor :api_key, :api_secret
 

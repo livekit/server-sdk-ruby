@@ -14,4 +14,5 @@ group :development do
   gem 'pry'
   gem 'pry-doc'
   gem 'yard'
+  gem 'protoc-gen-twirp_ruby'
 end

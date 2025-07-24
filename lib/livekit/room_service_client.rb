@@ -7,8 +7,8 @@ require 'livekit/utils'
 
 
 module LiveKit
-  class RoomServiceClient < Twirp::Client
-    client_for Proto::RoomServiceService
+  class RoomClient < Twirp::Client
+    client_for Proto::RoomService
     include AuthMixin
     attr_accessor :api_key, :api_secret
 
@@ -89,6 +89,14 @@ module LiveKit
       self.rpc(
         :RemoveParticipant,
         Proto::RoomParticipantIdentity.new(room: room, identity: identity),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
+      )
+    end
+
+    def forward_participant(room:, identity:, destination_room:)
+      self.rpc(
+        :ForwardParticipant,
+        Proto::ForwardParticipantRequest.new(room: room, identity: identity, destination_room: destination_room),
         headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
       )
     end
