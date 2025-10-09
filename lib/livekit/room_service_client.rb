@@ -93,6 +93,22 @@ module LiveKit
       )
     end
 
+    def forward_participant(room:, identity:, destination_room:)
+      self.rpc(
+        :ForwardParticipant,
+        Proto::ForwardParticipantRequest.new(room: room, identity: identity, destination_room: destination_room),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room, destinationRoom: destination_room)),
+      )
+    end
+
+    def move_participant(room:, identity:, destination_room:)
+      self.rpc(
+        :MoveParticipant,
+        Proto::MoveParticipantRequest.new(room: room, identity: identity, destination_room: destination_room),
+        headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room, destinationRoom: destination_room)),
+      )
+    end
+
     def mute_published_track(room:, identity:, track_sid:, muted:)
       self.rpc(
         :MutePublishedTrack,
