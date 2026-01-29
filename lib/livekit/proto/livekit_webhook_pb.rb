@@ -11,7 +11,7 @@ require 'livekit_ingress_pb'
 
 descriptor_data = "\n\x15livekit_webhook.proto\x12\x07livekit\x1a\x14livekit_models.proto\x1a\x14livekit_egress.proto\x1a\x15livekit_ingress.proto\"\x9b\x02\n\x0cWebhookEvent\x12\r\n\x05\x65vent\x18\x01 \x01(\t\x12\x1b\n\x04room\x18\x02 \x01(\x0b\x32\r.livekit.Room\x12-\n\x0bparticipant\x18\x03 \x01(\x0b\x32\x18.livekit.ParticipantInfo\x12(\n\x0b\x65gress_info\x18\t \x01(\x0b\x32\x13.livekit.EgressInfo\x12*\n\x0cingress_info\x18\n \x01(\x0b\x32\x14.livekit.IngressInfo\x12!\n\x05track\x18\x08 \x01(\x0b\x32\x12.livekit.TrackInfo\x12\n\n\x02id\x18\x06 \x01(\t\x12\x12\n\ncreated_at\x18\x07 \x01(\x03\x12\x17\n\x0bnum_dropped\x18\x0b \x01(\x05\x42\x02\x18\x01\x42\x46Z#github.com/livekit/protocol/livekit\xaa\x02\rLiveKit.Proto\xea\x02\x0eLiveKit::Protob\x06proto3"
 
-pool = Google::Protobuf::DescriptorPool.generated_pool
+pool = ::Google::Protobuf::DescriptorPool.generated_pool
 pool.add_serialized_file(descriptor_data)
 
 module LiveKit

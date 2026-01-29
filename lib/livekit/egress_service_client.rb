@@ -31,7 +31,11 @@ module LiveKit
       # true to record only audio
       audio_only: false,
       # true to record only video
-      video_only: false
+      video_only: false,
+      # DEFAULT_MIXING, DUAL_CHANNEL_AGENT, DUAL_CHANNEL_ALTERNATE
+      audio_mixing: nil,
+      # list of extra webhooks to call for this request
+      webhooks: nil
     )
       request = Proto::RoomCompositeEgressRequest.new(
         room_name: room_name,
@@ -41,6 +45,8 @@ module LiveKit
         custom_base_url: custom_base_url,
         audio_only: audio_only,
         video_only: video_only,
+        audio_mixing: audio_mixing,
+        webhooks: webhooks,
       )
       self.set_output(request, output)
       self.rpc(
@@ -60,7 +66,9 @@ module LiveKit
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
       # EncodingOptions, only one of preset or advanced could be set
-      advanced: nil
+      advanced: nil,
+      # list of extra webhooks to call for this request
+      webhooks: nil
     )
       request = Proto::ParticipantEgressRequest.new(
         room_name: room_name,
@@ -68,6 +76,7 @@ module LiveKit
         screen_share: screen_share,
         preset: preset,
         advanced: advanced,
+        webhooks: webhooks,
       )
       self.set_output(request, output)
       self.rpc(
@@ -88,7 +97,9 @@ module LiveKit
       # EncodingOptionsPreset, only one of preset or advanced could be set
       preset: nil,
       # EncodingOptions, only one of preset or advanced could be set
-      advanced: nil
+      advanced: nil,
+      # list of extra webhooks to call for this request
+      webhooks: nil
     )
       request = Proto::TrackCompositeEgressRequest.new(
         room_name: room_name,
@@ -96,6 +107,7 @@ module LiveKit
         advanced: advanced,
         audio_track_id: audio_track_id,
         video_track_id: video_track_id,
+        webhooks: webhooks,
       )
       self.set_output(request, output)
       self.rpc(
@@ -109,11 +121,14 @@ module LiveKit
       room_name,
       # either a DirectFileOutput - egress to storage or string - egress to WebSocket URL
       output,
-      track_id
+      track_id,
+      # list of extra webhooks to call for this request
+      webhooks: nil
     )
       request = Proto::TrackEgressRequest.new(
         room_name: room_name,
         track_id: track_id,
+        webhooks: webhooks,
       )
       if output.filepath
         request.file = output
@@ -140,7 +155,9 @@ module LiveKit
       # true to record only video
       video_only: false,
       # true to await START_RECORDING chrome log
-      await_start_signal: false
+      await_start_signal: false,
+      # list of extra webhooks to call for this request
+      webhooks: nil
     )
       request = Proto::WebEgressRequest.new(
         url: url,
@@ -149,6 +166,7 @@ module LiveKit
         audio_only: audio_only,
         video_only: video_only,
         await_start_signal: await_start_signal,
+        webhooks: webhooks,
       )
       self.set_output(request, output)
       self.rpc(

@@ -20,5 +20,6 @@ task :proto do
          "./protocol/protobufs/livekit_metrics.proto",
          "./protocol/protobufs/livekit_models.proto",
          "./protocol/protobufs/livekit_room.proto",
-         "./protocol/protobufs/livekit_webhook.proto")
+         "./protocol/protobufs/livekit_webhook.proto",
+         "./protocol/protobufs/logger/options.proto")
 end
