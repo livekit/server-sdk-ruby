@@ -48,7 +48,7 @@ module LiveKit
         audio_mixing: audio_mixing,
         webhooks: webhooks,
       )
-      self.set_output(request, output)
+      set_output(request, output)
       self.rpc(
         :StartRoomCompositeEgress,
         request,
@@ -78,7 +78,7 @@ module LiveKit
         advanced: advanced,
         webhooks: webhooks,
       )
-      self.set_output(request, output)
+      set_output(request, output)
       self.rpc(
         :StartParticipantEgress,
         request,
@@ -109,7 +109,7 @@ module LiveKit
         video_track_id: video_track_id,
         webhooks: webhooks,
       )
-      self.set_output(request, output)
+      set_output(request, output)
       self.rpc(
         :StartTrackCompositeEgress,
         request,
