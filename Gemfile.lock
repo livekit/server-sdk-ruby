@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    livekit-server-sdk (0.9.1)
+    livekit-server-sdk (0.9.0)
       google-protobuf (~> 4.30, >= 4.30.2)
       jwt (>= 2.2.3, < 3.0)
       twirp (~> 1.13, >= 1.13.1)
