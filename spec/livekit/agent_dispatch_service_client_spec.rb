@@ -14,7 +14,7 @@ RSpec.describe LiveKit::AgentDispatchServiceClient do
   describe '#create_dispatch' do
     it 'calls auth_header with keyword arguments' do
       expect(client).to receive(:auth_header).with(
-        video_grant: instance_of(LiveKit::VideoGrant)
+        video_grant: have_attributes(roomAdmin: true, room: room_name)
       ).and_call_original
 
       # Mock the RPC call to avoid actual network request
