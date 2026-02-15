@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "google-protobuf", "~> 4.30", ">= 4.30.2"
+  spec.add_dependency "google-protobuf", "~> 4.30", ">= 4.30.2", "< 4.31"
   spec.add_dependency "jwt", ">= 2.2.3", "< 3.0"
   spec.add_dependency "twirp", "~> 1.13", ">= 1.13.1"
 
