@@ -14,7 +14,7 @@
 Use this SDK to interact with <a href="https://livekit.io/">LiveKit</a> server APIs and create access tokens from your Ruby backend.
 <!--END_DESCRIPTION-->
 
-This library is designed to work with Ruby 2.6.0 and above.
+This library is designed to work with Ruby 3.0.0 and above.
 
 ## Installation
 

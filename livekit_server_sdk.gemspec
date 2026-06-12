@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "LiveKit Server SDK for Ruby"
   spec.homepage = "https://livekit.io"
   spec.license = "Apache-2.0"
-  spec.required_ruby_version = ">= 2.6.0"
+  spec.required_ruby_version = ">= 3.0.0"
 
   # spec.metadata["homepage_uri"] = spec.homepage
   # spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "google-protobuf", "~> 4.30", ">= 4.30.2"
-  spec.add_dependency "jwt", ">= 2.2.3", "< 3.0"
+  spec.add_dependency "jwt", ">= 3.0", "< 4.0"
   spec.add_dependency "twirp", "~> 1.13", ">= 1.13.1"
 
   # For more information and examples about making a new gem, checkout our
