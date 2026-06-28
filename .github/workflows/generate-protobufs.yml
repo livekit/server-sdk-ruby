@@ -1,0 +1,82 @@
+# Copyright 2026 LiveKit, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Regenerates the vendored protobuf/Twirp stubs (lib/livekit/proto) from the
+# `protocol` submodule and commits them back, so generated code is never
+# produced on a developer's machine. Runs on PRs that bump the submodule (or
+# change the generation task) and commits the regenerated files onto the PR
+# branch; also available on demand.
+
+name: Generate Protobufs
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "protocol"
+      - "Rakefile"
+      - ".github/workflows/generate-protobufs.yml"
+
+concurrency:
+  group: generate-protobufs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    # Actions cannot push to a fork's branch, so skip generation there. The
+    # checked-in files are still validated by the gem's test workflow.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          # Commit regenerated files back onto the PR branch (or the dispatched branch).
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1.190.0
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+
+      - name: Install protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          version: "30.2"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install protoc-gen-twirp_ruby
+        run: go install github.com/arthurnn/twirp-ruby/protoc-gen-twirp_ruby@v1.14.1
+
+      - name: Generate protobufs
+        run: |
+          export PATH="$(go env GOPATH)/bin:$PATH"
+          bundle exec rake proto
+
+      - name: Commit regenerated protobufs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: regenerate protobufs"
+          file_pattern: "lib/livekit/proto/**"

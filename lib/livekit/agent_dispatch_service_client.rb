@@ -54,7 +54,7 @@ module LiveKit
       self.rpc(
         :DeleteDispatch,
         request,
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room_name)),
+        headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name)),
       )
     end
 
@@ -70,7 +70,7 @@ module LiveKit
       res = self.rpc(
         :ListDispatch,
         request,
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room_name)),
+        headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name)),
       )
       if res.agent_dispatches.size > 0
         return res.agent_dispatches[0]
@@ -88,7 +88,7 @@ module LiveKit
       res = self.rpc(
         :ListDispatch,
         request,
-        headers: auth_header(VideoGrant.new(roomAdmin: true, room: room_name)),
+        headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name)),
       )
       res.agent_dispatches
     end

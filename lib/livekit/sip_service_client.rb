@@ -242,5 +242,104 @@ module LiveKit
         headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name), sip_grant: SIPGrant.new(call: true)),
       )
     end
+
+    # Updates an existing SIP inbound trunk, replacing it entirely.
+    #
+    # @param sip_trunk_id [String] ID of the SIP inbound trunk to update
+    # @param trunk [Proto::SIPInboundTrunkInfo] the full trunk definition to replace it with
+    def update_sip_inbound_trunk(sip_trunk_id, trunk)
+      request = Proto::UpdateSIPInboundTrunkRequest.new(
+        sip_trunk_id: sip_trunk_id,
+        replace: trunk,
+      )
+      self.rpc(
+        :UpdateSIPInboundTrunk,
+        request,
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
+
+    # Updates specific fields of an existing SIP inbound trunk. Only the fields
+    # set in +update+ are changed.
+    #
+    # @param sip_trunk_id [String] ID of the SIP inbound trunk to update
+    # @param update [Proto::SIPInboundTrunkUpdate] the fields to update
+    def update_sip_inbound_trunk_fields(sip_trunk_id, update)
+      request = Proto::UpdateSIPInboundTrunkRequest.new(
+        sip_trunk_id: sip_trunk_id,
+        update: update,
+      )
+      self.rpc(
+        :UpdateSIPInboundTrunk,
+        request,
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
+
+    # Updates an existing SIP outbound trunk, replacing it entirely.
+    #
+    # @param sip_trunk_id [String] ID of the SIP outbound trunk to update
+    # @param trunk [Proto::SIPOutboundTrunkInfo] the full trunk definition to replace it with
+    def update_sip_outbound_trunk(sip_trunk_id, trunk)
+      request = Proto::UpdateSIPOutboundTrunkRequest.new(
+        sip_trunk_id: sip_trunk_id,
+        replace: trunk,
+      )
+      self.rpc(
+        :UpdateSIPOutboundTrunk,
+        request,
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
+
+    # Updates specific fields of an existing SIP outbound trunk. Only the fields
+    # set in +update+ are changed.
+    #
+    # @param sip_trunk_id [String] ID of the SIP outbound trunk to update
+    # @param update [Proto::SIPOutboundTrunkUpdate] the fields to update
+    def update_sip_outbound_trunk_fields(sip_trunk_id, update)
+      request = Proto::UpdateSIPOutboundTrunkRequest.new(
+        sip_trunk_id: sip_trunk_id,
+        update: update,
+      )
+      self.rpc(
+        :UpdateSIPOutboundTrunk,
+        request,
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
+
+    # Updates an existing SIP dispatch rule, replacing it entirely.
+    #
+    # @param sip_dispatch_rule_id [String] ID of the SIP dispatch rule to update
+    # @param rule [Proto::SIPDispatchRuleInfo] the full dispatch rule definition to replace it with
+    def update_sip_dispatch_rule(sip_dispatch_rule_id, rule)
+      request = Proto::UpdateSIPDispatchRuleRequest.new(
+        sip_dispatch_rule_id: sip_dispatch_rule_id,
+        replace: rule,
+      )
+      self.rpc(
+        :UpdateSIPDispatchRule,
+        request,
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
+
+    # Updates specific fields of an existing SIP dispatch rule. Only the fields
+    # set in +update+ are changed.
+    #
+    # @param sip_dispatch_rule_id [String] ID of the SIP dispatch rule to update
+    # @param update [Proto::SIPDispatchRuleUpdate] the fields to update
+    def update_sip_dispatch_rule_fields(sip_dispatch_rule_id, update)
+      request = Proto::UpdateSIPDispatchRuleRequest.new(
+        sip_dispatch_rule_id: sip_dispatch_rule_id,
+        update: update,
+      )
+      self.rpc(
+        :UpdateSIPDispatchRule,
+        request,
+        headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
+      )
+    end
   end
 end

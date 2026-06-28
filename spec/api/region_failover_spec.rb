@@ -31,6 +31,8 @@ RSpec.describe LiveKit::RegionFailoverMiddleware do
     conn.post('livekit.RoomService/CreateRoom') do |req|
       req.headers['Authorization'] = 'Bearer test-token'
       req.headers['Content-Type'] = 'application/protobuf'
+      # These tests exercise failover, not authz; skip the mock's permission check.
+      req.headers['X-Lk-Mock-Skip-Auth'] = 'true'
       req.body = ''
       directives.each { |k, v| req.headers[k] = v }
     end

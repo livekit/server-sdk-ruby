@@ -62,8 +62,8 @@ module LiveKit
     using LiveKit::Utils::StringifyKeysRefinement
 
     attr_accessor :roomCreate, :roomJoin, :roomList, :roomRecord, :roomAdmin,
-      :room, :canPublish, :canPublishSources, :canSubscribe, :canPublishData,
-      :canUpdateOwnMetadata, :hidden, :recorder, :ingressAdmin
+      :room, :destinationRoom, :canPublish, :canPublishSources, :canSubscribe,
+      :canPublishData, :canUpdateOwnMetadata, :hidden, :recorder, :ingressAdmin
 
     def initialize(
       # true if can create or delete rooms
@@ -78,6 +78,8 @@ module LiveKit
       roomAdmin: nil,
       # name of the room for join or admin permissions
       room: nil,
+      # destination room a participant may be forwarded or moved to
+      destinationRoom: nil,
       # for join tokens, can participant publish, true by default
       canPublish: nil,
       # TrackSource types that a participant may publish
@@ -101,6 +103,7 @@ module LiveKit
       @roomRecord = roomRecord
       @roomAdmin = roomAdmin
       @room = room
+      @destinationRoom = destinationRoom
       @canPublish = canPublish
       @canPublishSources = canPublishSources
       @canSubscribe = canSubscribe
@@ -123,6 +126,7 @@ module LiveKit
         roomRecord: hash["roomRecord"],
         roomAdmin: hash["roomAdmin"],
         room: hash["room"],
+        destinationRoom: hash["destinationRoom"],
         canPublish: hash["canPublish"],
         canPublishSources: hash["canPublishSources"],
         canSubscribe: hash["canSubscribe"],
