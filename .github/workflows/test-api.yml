@@ -1,0 +1,41 @@
+name: Test API
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  failover:
+    runs-on: ubuntu-latest
+    services:
+      mock-server:
+        image: livekit/test-server:latest
+        ports:
+          - 9999:9999
+          - 10000:10000
+          - 10001:10001
+          - 10002:10002
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1.190.0
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Wait for mock server
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:9999/settings/regions >/dev/null && exit 0
+            sleep 1
+          done
+          echo "mock server did not become ready" && exit 1
+
+      - name: Run API tests
+        run: bundle exec rspec spec/api
