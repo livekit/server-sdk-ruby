@@ -7,12 +7,13 @@ require 'google/protobuf'
 require 'google/protobuf/descriptor_pb'
 
 
-descriptor_data = "\n\x14logger/options.proto\x12\x06logger\x1a google/protobuf/descriptor.proto:/\n\x06redact\x12\x1d.google.protobuf.FieldOptions\x18\xc1\xcd\x05 \x01(\x08:6\n\rredact_format\x12\x1d.google.protobuf.FieldOptions\x18\xc2\xcd\x05 \x01(\tBMZ*github.com/livekit/protocol/livekit/logger\xaa\x02\rLiveKit.Proto\xea\x02\x0eLiveKit::Protob\x06proto3"
+descriptor_data = "\n\x14logger/options.proto\x12\x06logger\x1a google/protobuf/descriptor.proto*W\n\x0bSensitivity\x12\x1b\n\x17SENSITIVITY_UNSPECIFIED\x10\x00\x12\x13\n\x0fSENSITIVITY_PII\x10\x01\x12\x16\n\x12SENSITIVITY_SECRET\x10\x02:5\n\rredact_format\x12\x1d.google.protobuf.FieldOptions\x18\x86\n \x01(\t:,\n\x04name\x12\x1d.google.protobuf.FieldOptions\x18\x87\n \x01(\t:H\n\x0bsensitivity\x12\x1d.google.protobuf.FieldOptions\x18\x88\n \x01(\x0e\x32\x13.logger.SensitivityBMZ*github.com/livekit/protocol/livekit/logger\xaa\x02\rLiveKit.Proto\xea\x02\x0eLiveKit::Protob\x06proto3"
 
-pool = ::Google::Protobuf::DescriptorPool.generated_pool
+pool = Google::Protobuf::DescriptorPool.generated_pool
 pool.add_serialized_file(descriptor_data)
 
 module LiveKit
   module Proto
+    Sensitivity = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("logger.Sensitivity").enummodule
   end
 end

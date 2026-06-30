@@ -3,6 +3,7 @@
 require "livekit/proto/livekit_egress_twirp"
 require "livekit/auth_mixin"
 require 'livekit/utils'
+require 'livekit/failover'
 
 module LiveKit
   class EgressServiceClient < Twirp::Client
@@ -10,8 +11,8 @@ module LiveKit
     include AuthMixin
     attr_accessor :api_key, :api_secret
 
-    def initialize(base_url, api_key: nil, api_secret: nil)
-      super(File.join(Utils.to_http_url(base_url), "/twirp"))
+    def initialize(base_url, api_key: nil, api_secret: nil, failover: true)
+      super(LiveKit::Failover.connection(base_url, failover))
       @api_key = api_key
       @api_secret = api_secret
     end

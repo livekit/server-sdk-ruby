@@ -7,7 +7,7 @@ task default: %i[spec]
 
 desc "Generate protobuf stubs"
 task :proto do
-  system("protoc",
+  ok = system("protoc",
          "--proto_path=protocol/protobufs",
          "--ruby_out=lib/livekit/proto",
          "--twirp_ruby_out=lib/livekit/proto",
@@ -20,6 +20,11 @@ task :proto do
          "./protocol/protobufs/livekit_metrics.proto",
          "./protocol/protobufs/livekit_models.proto",
          "./protocol/protobufs/livekit_room.proto",
+         "./protocol/protobufs/livekit_rtc.proto",
          "./protocol/protobufs/livekit_webhook.proto",
+         "./protocol/protobufs/livekit_connector.proto",
+         "./protocol/protobufs/livekit_connector_twilio.proto",
+         "./protocol/protobufs/livekit_connector_whatsapp.proto",
          "./protocol/protobufs/logger/options.proto")
+  abort("protoc failed to generate protobuf stubs") unless ok
 end
