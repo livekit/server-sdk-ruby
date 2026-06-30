@@ -21,12 +21,26 @@ module LiveKit
   module Failover
     MAX_ATTEMPTS = 3
     BACKOFF_BASE = 0.2
+    # Default per-request timeout (seconds). Calls that dial a phone override it
+    # via TIMEOUT_HEADER (see SIPServiceClient).
+    DEFAULT_TIMEOUT = 10
+    # Below this per-request timeout a retry is unlikely to help and many clients
+    # would retry in lockstep across regions, so a short request gets a single
+    # attempt (thundering-herd guard).
+    MIN_FAILOVER_TIMEOUT = 5
+    # Internal header carrying a per-request timeout override (seconds). Consumed
+    # by the middleware and not sent to the server.
+    TIMEOUT_HEADER = 'X-Lk-Request-Timeout'
 
     # Total request attempts including the initial one; 1 means no failover.
-    # Failover only engages when enabled and the host is a LiveKit Cloud domain.
-    # +force+ bypasses the cloud-host check and is for internal testing only.
-    def self.attempts(enabled, host, force = false)
-      enabled && (force || cloud?(host)) ? MAX_ATTEMPTS : 1
+    # Failover only engages when enabled, the host is a LiveKit Cloud domain, and
+    # the request timeout is long enough to retry. +force+ bypasses the
+    # cloud-host check and is for internal testing only.
+    def self.attempts(enabled, host, force, timeout)
+      return 1 unless enabled && (force || cloud?(host))
+      return 1 if timeout && timeout < MIN_FAILOVER_TIMEOUT
+
+      MAX_ATTEMPTS
     end
 
     # Builds a Faraday connection wired with the region-failover middleware and
@@ -34,6 +48,7 @@ module LiveKit
     def self.connection(base_url, failover)
       url = File.join(Utils.to_http_url(base_url), '/twirp')
       Faraday.new(url: url) do |f|
+        f.options.timeout = DEFAULT_TIMEOUT
         f.use RegionFailoverMiddleware, failover: failover
         f.adapter Faraday.default_adapter
       end
@@ -138,8 +153,16 @@ module LiveKit
     def call(env)
       original_url = env.url.dup
       request_body = env.body
+
+      # A per-request timeout override (e.g. for SIP dialing) travels as an
+      # internal header; consume it so it isn't sent to the server. Otherwise
+      # use the connection's configured timeout.
+      timeout = env.request_headers.delete(Failover::TIMEOUT_HEADER)&.to_f
+      timeout ||= env.request.timeout
+      env.request.timeout = timeout if timeout
+
       request_headers = env.request_headers.dup
-      max_attempts = Failover.attempts(@failover, original_url.host, @force)
+      max_attempts = Failover.attempts(@failover, original_url.host, @force, timeout)
 
       attempted = [Failover.host_key(original_url)]
       regions = nil

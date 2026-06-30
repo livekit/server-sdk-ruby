@@ -9,6 +9,10 @@ module LiveKit
     include AuthMixin
     attr_accessor :api_key, :api_secret
 
+    # Calls that dial a phone (CreateSIPParticipant with wait_until_answered,
+    # TransferSIPParticipant) take longer than a normal request.
+    SIP_DIAL_TIMEOUT = 30
+
     def initialize(base_url, api_key: nil, api_secret: nil, failover: true)
       super(LiveKit::Failover.connection(base_url, failover))
       @api_key = api_key
@@ -199,7 +203,9 @@ module LiveKit
       # Optional, max call duration in seconds
       max_call_duration: nil,
       # Optional, enable Krisp for this call
-      krisp_enabled: false
+      krisp_enabled: false,
+      # Optional, wait for the call to be answered before returning
+      wait_until_answered: false
     )
       request = Proto::CreateSIPParticipantRequest.new(
         sip_trunk_id: sip_trunk_id,
@@ -214,13 +220,13 @@ module LiveKit
         hide_phone_number: hide_phone_number,
         ringing_timeout: ringing_timeout,
         max_call_duration: max_call_duration,
-        krisp_enabled: krisp_enabled
+        krisp_enabled: krisp_enabled,
+        wait_until_answered: wait_until_answered
       )
-      self.rpc(
-        :CreateSIPParticipant,
-        request,
-        headers: auth_header(sip_grant: SIPGrant.new(call: true)),
-      )
+      headers = auth_header(sip_grant: SIPGrant.new(call: true))
+      # Dialing a phone and waiting for an answer takes longer than a normal request.
+      headers[Failover::TIMEOUT_HEADER] = SIP_DIAL_TIMEOUT.to_s if wait_until_answered
+      self.rpc(:CreateSIPParticipant, request, headers: headers)
     end
 
     def transfer_sip_participant(
@@ -236,11 +242,10 @@ module LiveKit
         transfer_to: transfer_to,
         play_dialtone: play_dialtone,
       )
-      self.rpc(
-        :TransferSIPParticipant,
-        request,
-        headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name), sip_grant: SIPGrant.new(call: true)),
-      )
+      headers = auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name), sip_grant: SIPGrant.new(call: true))
+      # Transferring a call dials a phone, which takes longer than a normal request.
+      headers[Failover::TIMEOUT_HEADER] = SIP_DIAL_TIMEOUT.to_s
+      self.rpc(:TransferSIPParticipant, request, headers: headers)
     end
 
     # Updates an existing SIP inbound trunk, replacing it entirely.
