@@ -40,11 +40,12 @@ module LiveKit
     # @return [Proto::AcceptWhatsAppCallResponse]
     def accept_whatsapp_call(request, timeout: nil)
       headers = auth_header(video_grant: VideoGrant.new(roomCreate: true))
-      # When waiting for an answer, dialing takes longer than a normal request and
-      # the request must outlast ringing; otherwise honor any user timeout.
+      # Accept can block until the call is answered, so default the request timeout
+      # to the standard ring window; otherwise honor any user timeout. The caller
+      # overrides via +timeout+ and should set it above the ringing_timeout passed
+      # to dial_whatsapp_call (the two calls are separate).
       if request.wait_until_answered
-        ringing = request.ringing_timeout&.seconds
-        headers[Failover::TIMEOUT_HEADER] = DialTimeout.resolve(timeout, ringing).to_s
+        headers[Failover::TIMEOUT_HEADER] = (timeout || DialTimeout::DEFAULT_RINGING_TIMEOUT).to_s
       elsif timeout
         headers[Failover::TIMEOUT_HEADER] = timeout.to_s
       end
