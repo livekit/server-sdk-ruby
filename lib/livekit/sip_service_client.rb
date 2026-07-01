@@ -2,21 +2,13 @@ require "livekit/proto/livekit_sip_twirp"
 require "livekit/auth_mixin"
 require 'livekit/utils'
 require 'livekit/failover'
+require 'livekit/dial_timeout'
 
 module LiveKit
   class SIPServiceClient < Twirp::Client
     client_for Proto::SIPService
     include AuthMixin
     attr_accessor :api_key, :api_secret
-
-    # Calls that dial a phone (CreateSIPParticipant with wait_until_answered,
-    # TransferSIPParticipant) take longer than a normal request.
-    SIP_DIAL_TIMEOUT = 30
-
-    # A dialing request must outlast the ringing window, or it would abort before
-    # the call can be answered. Keep the request timeout at least this many
-    # seconds above the ringing timeout.
-    RINGING_TIMEOUT_MARGIN = 2
 
     def initialize(base_url, api_key: nil, api_secret: nil, failover: true)
       super(LiveKit::Failover.connection(base_url, failover))
@@ -234,7 +226,7 @@ module LiveKit
       headers = auth_header(sip_grant: SIPGrant.new(call: true))
       # When waiting for an answer, dialing takes longer than a normal request
       # and the request must outlast ringing; otherwise honor any user timeout.
-      effective_timeout = wait_until_answered ? sip_dial_timeout(timeout, ringing_timeout) : timeout
+      effective_timeout = wait_until_answered ? DialTimeout.resolve(timeout, ringing_timeout) : timeout
       headers[Failover::TIMEOUT_HEADER] = effective_timeout.to_s if effective_timeout
       self.rpc(:CreateSIPParticipant, request, headers: headers)
     end
@@ -262,17 +254,8 @@ module LiveKit
       # Transferring a call dials a phone, which takes longer than a normal
       # request, so use a longer default unless the user specified a timeout, and
       # keep the request alive past ringing so the destination can answer.
-      headers[Failover::TIMEOUT_HEADER] = sip_dial_timeout(timeout, ringing_timeout).to_s
+      headers[Failover::TIMEOUT_HEADER] = DialTimeout.resolve(timeout, ringing_timeout).to_s
       self.rpc(:TransferSIPParticipant, request, headers: headers)
-    end
-
-    # Request timeout (seconds) for a phone-dialing call: the user value (or the
-    # dial default) raised to stay at least RINGING_TIMEOUT_MARGIN above the
-    # ringing timeout, so the request doesn't abort before the call is answered.
-    private def sip_dial_timeout(timeout, ringing_timeout)
-      effective = timeout || SIP_DIAL_TIMEOUT
-      effective = [effective, ringing_timeout + RINGING_TIMEOUT_MARGIN].max if ringing_timeout
-      effective
     end
 
     # Updates an existing SIP inbound trunk, replacing it entirely.

@@ -2,6 +2,7 @@ require "livekit/proto/livekit_connector_twirp"
 require "livekit/auth_mixin"
 require 'livekit/utils'
 require 'livekit/failover'
+require 'livekit/dial_timeout'
 
 module LiveKit
   # Client for LiveKit's Connector service, bridging WhatsApp and Twilio calls
@@ -33,13 +34,21 @@ module LiveKit
 
     # Accepts an inbound WhatsApp call.
     # @param request [Proto::AcceptWhatsAppCallRequest]
+    # @param timeout [Numeric, nil] optional request timeout in seconds. When the
+    #   request waits for an answer, it defaults to a longer value (dialing takes
+    #   time) and is raised, if needed, to stay above the request's ringing_timeout.
     # @return [Proto::AcceptWhatsAppCallResponse]
-    def accept_whatsapp_call(request)
-      self.rpc(
-        :AcceptWhatsAppCall,
-        request,
-        headers: auth_header(video_grant: VideoGrant.new(roomCreate: true)),
-      )
+    def accept_whatsapp_call(request, timeout: nil)
+      headers = auth_header(video_grant: VideoGrant.new(roomCreate: true))
+      # When waiting for an answer, dialing takes longer than a normal request and
+      # the request must outlast ringing; otherwise honor any user timeout.
+      if request.wait_until_answered
+        ringing = request.ringing_timeout&.seconds
+        headers[Failover::TIMEOUT_HEADER] = DialTimeout.resolve(timeout, ringing).to_s
+      elsif timeout
+        headers[Failover::TIMEOUT_HEADER] = timeout.to_s
+      end
+      self.rpc(:AcceptWhatsAppCall, request, headers: headers)
     end
 
     # Connects an established WhatsApp call (used for business-initiated calls).
