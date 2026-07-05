@@ -181,8 +181,13 @@ module LiveKit
       sip_trunk_id,
       sip_call_to,
       room_name,
+      # Optional inline outbound trunk configuration (SIPOutboundConfig). Use
+      # instead of a stored sip_trunk_id to configure the trunk per call.
+      trunk: nil,
       # Optional SIP From number to use. If empty, trunk number is used.
       from_number: nil,
+      # Optional custom caller ID shown to the callee. Requires provider support.
+      display_name: nil,
       # Optional identity of the participant in LiveKit room
       participant_identity: nil,
       # Optional name of the participant in LiveKit room
@@ -213,8 +218,10 @@ module LiveKit
       ringing_timeout = DialTimeout::DEFAULT_RINGING_TIMEOUT if wait_until_answered && ringing_timeout.nil?
       request = Proto::CreateSIPParticipantRequest.new(
         sip_trunk_id: sip_trunk_id,
+        trunk: trunk,
         sip_call_to: sip_call_to,
         sip_number: from_number,
+        display_name: display_name,
         room_name: room_name,
         participant_identity: participant_identity,
         participant_name: participant_name,
