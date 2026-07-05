@@ -18,7 +18,7 @@ RSpec.describe LiveKit::AgentDispatchServiceClient do
       ).and_call_original
 
       # Mock the RPC call to avoid actual network request
-      allow(client).to receive(:rpc).and_return(
+      allow(client).to receive(:rpc!).and_return(
         LiveKit::Proto::AgentDispatch.new(id: dispatch_id)
       )
 
@@ -33,7 +33,7 @@ RSpec.describe LiveKit::AgentDispatchServiceClient do
       ).and_call_original
 
       # Mock the RPC call to avoid actual network request
-      allow(client).to receive(:rpc).and_return(
+      allow(client).to receive(:rpc!).and_return(
         LiveKit::Proto::AgentDispatch.new(id: dispatch_id)
       )
 
@@ -48,7 +48,7 @@ RSpec.describe LiveKit::AgentDispatchServiceClient do
       ).and_call_original
 
       # Mock the RPC call to avoid actual network request
-      allow(client).to receive(:rpc).and_return(
+      allow(client).to receive(:rpc!).and_return(
         LiveKit::Proto::ListAgentDispatchResponse.new(
           agent_dispatches: [LiveKit::Proto::AgentDispatch.new(id: dispatch_id)]
         )
@@ -65,7 +65,7 @@ RSpec.describe LiveKit::AgentDispatchServiceClient do
       ).and_call_original
 
       # Mock the RPC call to avoid actual network request
-      allow(client).to receive(:rpc).and_return(
+      allow(client).to receive(:rpc!).and_return(
         LiveKit::Proto::ListAgentDispatchResponse.new(
           agent_dispatches: []
         )
@@ -78,14 +78,14 @@ RSpec.describe LiveKit::AgentDispatchServiceClient do
   describe 'Ruby 3 compatibility' do
     it 'does not raise ArgumentError when calling methods' do
       # Mock the RPC calls
-      allow(client).to receive(:rpc).and_return(
+      allow(client).to receive(:rpc!).and_return(
         LiveKit::Proto::AgentDispatch.new(id: dispatch_id)
       )
 
       expect { client.create_dispatch(room_name, agent_name) }.not_to raise_error
       expect { client.delete_dispatch(dispatch_id, room_name) }.not_to raise_error
 
-      allow(client).to receive(:rpc).and_return(
+      allow(client).to receive(:rpc!).and_return(
         LiveKit::Proto::ListAgentDispatchResponse.new(agent_dispatches: [])
       )
 

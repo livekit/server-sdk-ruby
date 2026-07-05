@@ -9,10 +9,11 @@ module LiveKit
     include AuthMixin
     attr_accessor :api_key, :api_secret
 
-    def initialize(base_url, api_key: nil, api_secret: nil, failover: true)
+    def initialize(base_url, api_key: nil, api_secret: nil, token: nil, failover: true)
       super(LiveKit::Failover.connection(base_url, failover))
       @api_key = api_key
       @api_secret = api_secret
+      @token = token
     end
 
     def create_ingress(
@@ -49,7 +50,7 @@ module LiveKit
         enable_transcoding: enable_transcoding,
         url: url,
       )
-      self.rpc(
+      rpc!(
         :CreateIngress,
         request,
         headers:auth_header(video_grant: VideoGrant.new(ingressAdmin: true)),
@@ -87,7 +88,7 @@ module LiveKit
         bypass_transcoding: bypass_transcoding,
         enable_transcoding: enable_transcoding,
       )
-      self.rpc(
+      rpc!(
         :UpdateIngress,
         request,
         headers:auth_header(video_grant: VideoGrant.new(ingressAdmin: true)),
@@ -104,7 +105,7 @@ module LiveKit
         room_name: room_name,
         ingress_id: ingress_id,
       )
-      self.rpc(
+      rpc!(
         :ListIngress,
         request,
         headers:auth_header(video_grant: VideoGrant.new(ingressAdmin: true)),
@@ -115,7 +116,7 @@ module LiveKit
       request = Proto::DeleteIngressRequest.new(
         ingress_id: ingress_id
       )
-      self.rpc(
+      rpc!(
         :DeleteIngress,
         request,
         headers:auth_header(video_grant: VideoGrant.new(ingressAdmin: true)),
