@@ -2,16 +2,13 @@ require "livekit/proto/livekit_sip_twirp"
 require "livekit/auth_mixin"
 require 'livekit/utils'
 require 'livekit/failover'
+require 'livekit/dial_timeout'
 
 module LiveKit
   class SIPServiceClient < Twirp::Client
     client_for Proto::SIPService
     include AuthMixin
     attr_accessor :api_key, :api_secret
-
-    # Calls that dial a phone (CreateSIPParticipant with wait_until_answered,
-    # TransferSIPParticipant) take longer than a normal request.
-    SIP_DIAL_TIMEOUT = 30
 
     def initialize(base_url, api_key: nil, api_secret: nil, failover: true)
       super(LiveKit::Failover.connection(base_url, failover))
@@ -205,8 +202,14 @@ module LiveKit
       # Optional, enable Krisp for this call
       krisp_enabled: false,
       # Optional, wait for the call to be answered before returning
-      wait_until_answered: false
+      wait_until_answered: false,
+      # Optional, request timeout in seconds. Defaults to a longer value when
+      # wait_until_answered is set (dialing takes time).
+      timeout: nil
     )
+      # When waiting for an answer, pin the ring window explicitly so our request
+      # timeout doesn't depend on the server's default (which could change).
+      ringing_timeout = DialTimeout::DEFAULT_RINGING_TIMEOUT if wait_until_answered && ringing_timeout.nil?
       request = Proto::CreateSIPParticipantRequest.new(
         sip_trunk_id: sip_trunk_id,
         sip_call_to: sip_call_to,
@@ -224,8 +227,10 @@ module LiveKit
         wait_until_answered: wait_until_answered
       )
       headers = auth_header(sip_grant: SIPGrant.new(call: true))
-      # Dialing a phone and waiting for an answer takes longer than a normal request.
-      headers[Failover::TIMEOUT_HEADER] = SIP_DIAL_TIMEOUT.to_s if wait_until_answered
+      # When waiting for an answer, dialing takes longer than a normal request
+      # and the request must outlast ringing; otherwise honor any user timeout.
+      effective_timeout = wait_until_answered ? DialTimeout.resolve(timeout, ringing_timeout) : timeout
+      headers[Failover::TIMEOUT_HEADER] = effective_timeout.to_s if effective_timeout
       self.rpc(:CreateSIPParticipant, request, headers: headers)
     end
 
@@ -233,18 +238,26 @@ module LiveKit
       room_name,
       participant_identity,
       transfer_to,
-      play_dialtone: nil
+      play_dialtone: nil,
+      # Optional, max time for the transfer destination to answer, in seconds.
+      ringing_timeout: nil,
+      # Optional, request timeout in seconds. Defaults to a longer value since
+      # transferring dials a phone.
+      timeout: nil
     )
 
+      # Transferring a call dials a phone and must outlast ringing. Pin the ring
+      # window explicitly so our request timeout doesn't depend on the server default.
+      ringing_timeout ||= DialTimeout::DEFAULT_RINGING_TIMEOUT
       request = Proto::TransferSIPParticipantRequest.new(
         room_name: room_name,
         participant_identity: participant_identity,
         transfer_to: transfer_to,
         play_dialtone: play_dialtone,
+        ringing_timeout: ringing_timeout,
       )
       headers = auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name), sip_grant: SIPGrant.new(call: true))
-      # Transferring a call dials a phone, which takes longer than a normal request.
-      headers[Failover::TIMEOUT_HEADER] = SIP_DIAL_TIMEOUT.to_s
+      headers[Failover::TIMEOUT_HEADER] = DialTimeout.resolve(timeout, ringing_timeout).to_s
       self.rpc(:TransferSIPParticipant, request, headers: headers)
     end
 
