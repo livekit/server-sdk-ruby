@@ -15,8 +15,8 @@ module LiveKit
     include AuthMixin
     attr_accessor :api_key, :api_secret
 
-    def initialize(base_url, api_key: nil, api_secret: nil, token: nil, failover: true)
-      super(LiveKit::Failover.connection(base_url, failover))
+    def initialize(base_url, api_key: nil, api_secret: nil, token: nil, failover: true, connection: nil)
+      super(connection || LiveKit::Failover.connection(base_url, failover))
       @api_key = api_key
       @api_secret = api_secret
       @token = token

@@ -6,6 +6,7 @@ require "livekit/ingress_service_client"
 require "livekit/sip_service_client"
 require "livekit/agent_dispatch_service_client"
 require "livekit/connector_service_client"
+require "livekit/failover"
 
 module LiveKit
   # A single entry point to every LiveKit server API, exposing each service
@@ -43,7 +44,10 @@ module LiveKit
         raise ArgumentError, "either a token, or api_key and api_secret, are required"
       end
 
-      opts = { api_key: api_key, api_secret: api_secret, token: token, failover: failover }
+      # Share one Faraday connection (and its adapter/middleware) across every
+      # service instead of letting each open its own.
+      connection = LiveKit::Failover.connection(url, failover)
+      opts = { api_key: api_key, api_secret: api_secret, token: token, failover: failover, connection: connection }
       @room = RoomServiceClient.new(url, **opts)
       @egress = EgressServiceClient.new(url, **opts)
       @ingress = IngressServiceClient.new(url, **opts)
