@@ -215,6 +215,16 @@ RSpec.describe LiveKit::LiveKitAPI do
     expect(p.room_name).to eq('test-room')
     expect(p.participant_identity).to eq('sip-caller')
 
+    # Inline outbound trunk config (no stored trunk id) + custom caller ID.
+    inline = api.sip.create_sip_participant('', '+15105550100', 'test-room',
+                                            trunk: LiveKit::Proto::SIPOutboundConfig.new(
+                                              hostname: 'sip.telco.example.com',
+                                              transport: :SIP_TRANSPORT_UDP
+                                            ),
+                                            from_number: '+15105550199', display_name: 'Support',
+                                            participant_identity: 'sip-inline')
+    expect(inline.room_name).to eq('test-room')
+
     mock!(api.sip, { 'delayMs' => 0 })
     expect do
       api.sip.create_sip_participant('ST_abc123', '+15105550100', 'test-room',
