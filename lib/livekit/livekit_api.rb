@@ -35,9 +35,17 @@ module LiveKit
     # variable: +LIVEKIT_URL+, +LIVEKIT_TOKEN+, +LIVEKIT_API_KEY+, +LIVEKIT_API_SECRET+.
     def initialize(url = nil, api_key: nil, api_secret: nil, token: nil, failover: true)
       url ||= ENV["LIVEKIT_URL"]
-      token ||= ENV["LIVEKIT_TOKEN"]
-      api_key ||= ENV["LIVEKIT_API_KEY"]
-      api_secret ||= ENV["LIVEKIT_API_SECRET"]
+
+      # Only fall back to environment credentials when none were provided
+      # explicitly, so an ambient LIVEKIT_TOKEN can't silently override an
+      # explicit api_key/secret (or vice versa).
+      if token.nil? && api_key.nil? && api_secret.nil?
+        token = ENV["LIVEKIT_TOKEN"]
+      end
+      if token.nil? && api_key.nil? && api_secret.nil?
+        api_key = ENV["LIVEKIT_API_KEY"]
+        api_secret = ENV["LIVEKIT_API_SECRET"]
+      end
 
       raise ArgumentError, "url is required (pass it or set LIVEKIT_URL)" if url.nil? || url.empty?
       if token.nil? && (api_key.nil? || api_secret.nil?)
