@@ -11,10 +11,11 @@ module LiveKit
     include AuthMixin
     attr_accessor :api_key, :api_secret
 
-    def initialize(base_url, api_key: nil, api_secret: nil, failover: true)
-      super(LiveKit::Failover.connection(base_url, failover))
+    def initialize(base_url, api_key: nil, api_secret: nil, token: nil, failover: true, connection: nil)
+      super(connection || LiveKit::Failover.connection(base_url, failover))
       @api_key = api_key
       @api_secret = api_secret
+      @token = token
     end
 
     def start_room_composite_egress(
@@ -50,7 +51,7 @@ module LiveKit
         webhooks: webhooks,
       )
       self.set_output(request, output)
-      self.rpc(
+      rpc!(
         :StartRoomCompositeEgress,
         request,
         headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
@@ -80,7 +81,7 @@ module LiveKit
         webhooks: webhooks,
       )
       self.set_output(request, output)
-      self.rpc(
+      rpc!(
         :StartParticipantEgress,
         request,
         headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
@@ -111,7 +112,7 @@ module LiveKit
         webhooks: webhooks,
       )
       self.set_output(request, output)
-      self.rpc(
+      rpc!(
         :StartTrackCompositeEgress,
         request,
         headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
@@ -136,7 +137,7 @@ module LiveKit
       else
         request.websocket_url = output
       end
-      self.rpc(
+      rpc!(
         :StartTrackEgress,
         request,
         headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
@@ -170,7 +171,7 @@ module LiveKit
         webhooks: webhooks,
       )
       self.set_output(request, output)
-      self.rpc(
+      rpc!(
         :StartWebEgress,
         request,
         headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
@@ -178,7 +179,7 @@ module LiveKit
     end
 
     def update_layout(egress_id, layout)
-      self.rpc(
+      rpc!(
         :UpdateLayout,
         Proto::UpdateLayoutRequest.new(
           egress_id: egress_id,
@@ -192,7 +193,7 @@ module LiveKit
       add_output_urls: [],
       remove_output_urls: []
     )
-      self.rpc(
+      rpc!(
         :UpdateStream,
         Proto::UpdateStreamRequest.new(
           egress_id: egress_id,
@@ -209,7 +210,7 @@ module LiveKit
       egress_id: nil,
       active: false
     )
-      self.rpc(
+      rpc!(
         :ListEgress,
         Proto::ListEgressRequest.new(
           room_name: room_name,
@@ -221,7 +222,7 @@ module LiveKit
     end
 
     def stop_egress(egress_id)
-      self.rpc(
+      rpc!(
         :StopEgress,
         Proto::StopEgressRequest.new(egress_id: egress_id),
         headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
@@ -253,13 +254,15 @@ module LiveKit
           end
         end
       elsif output.is_a? LiveKit::Proto::EncodedFileOutput
-        request.file = output
+        # The singular field is deprecated and absent on some requests (e.g.
+        # ParticipantEgressRequest); the plural *_outputs is the current field.
+        request.file = output if request.respond_to?(:file=)
         request.file_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::EncodedFileOutput, [output])
       elsif output.is_a? LiveKit::Proto::SegmentedFileOutput
-        request.segments = output
+        request.segments = output if request.respond_to?(:segments=)
         request.segment_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::SegmentedFileOutput, [output])
       elsif output.is_a? LiveKit::Proto::StreamOutput
-        request.stream = output
+        request.stream = output if request.respond_to?(:stream=)
         request.stream_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::StreamOutput, [output])
       elsif output.is_a? LiveKit::Proto::ImageOutput
         request.image_outputs = Google::Protobuf::RepeatedField.new(:message, Proto::ImageOutput, [output])

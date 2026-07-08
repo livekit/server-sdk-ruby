@@ -13,10 +13,11 @@ module LiveKit
     include AuthMixin
     attr_accessor :api_key, :api_secret
 
-    def initialize(base_url, api_key: nil, api_secret: nil, failover: true)
-      super(LiveKit::Failover.connection(base_url, failover))
+    def initialize(base_url, api_key: nil, api_secret: nil, token: nil, failover: true, connection: nil)
+      super(connection || LiveKit::Failover.connection(base_url, failover))
       @api_key = api_key
       @api_secret = api_secret
+      @token = token
     end
 
     def create_room(name,
@@ -29,7 +30,7 @@ module LiveKit
         sync_streams: nil,
         departure_timeout: nil
       )
-      self.rpc(
+      rpc!(
         :CreateRoom,
         Proto::CreateRoomRequest.new(
           name: name,
@@ -47,7 +48,7 @@ module LiveKit
     end
 
     def list_rooms(names: nil)
-      self.rpc(
+      rpc!(
         :ListRooms,
         Proto::ListRoomsRequest.new(names: names),
         headers:auth_header(video_grant: VideoGrant.new(roomList: true)),
@@ -55,7 +56,7 @@ module LiveKit
     end
 
     def delete_room(room:)
-      self.rpc(
+      rpc!(
         :DeleteRoom,
         Proto::DeleteRoomRequest.new(room: room),
         headers:auth_header(video_grant: VideoGrant.new(roomCreate: true)),
@@ -63,7 +64,7 @@ module LiveKit
     end
 
     def update_room_metadata(room:, metadata:)
-      self.rpc(
+      rpc!(
         :UpdateRoomMetadata,
         Proto::UpdateRoomMetadataRequest.new(room: room, metadata: metadata),
         headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
@@ -71,7 +72,7 @@ module LiveKit
     end
 
     def list_participants(room:)
-      self.rpc(
+      rpc!(
         :ListParticipants,
         Proto::ListParticipantsRequest.new(room: room),
         headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
@@ -79,7 +80,7 @@ module LiveKit
     end
 
     def get_participant(room:, identity:)
-      self.rpc(
+      rpc!(
         :GetParticipant,
         Proto::RoomParticipantIdentity.new(room: room, identity: identity),
         headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
@@ -87,7 +88,7 @@ module LiveKit
     end
 
     def remove_participant(room:, identity:)
-      self.rpc(
+      rpc!(
         :RemoveParticipant,
         Proto::RoomParticipantIdentity.new(room: room, identity: identity),
         headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
@@ -95,7 +96,7 @@ module LiveKit
     end
 
     def forward_participant(room:, identity:, destination_room:)
-      self.rpc(
+      rpc!(
         :ForwardParticipant,
         Proto::ForwardParticipantRequest.new(room: room, identity: identity, destination_room: destination_room),
         headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room, destinationRoom: destination_room)),
@@ -103,7 +104,7 @@ module LiveKit
     end
 
     def move_participant(room:, identity:, destination_room:)
-      self.rpc(
+      rpc!(
         :MoveParticipant,
         Proto::MoveParticipantRequest.new(room: room, identity: identity, destination_room: destination_room),
         headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room, destinationRoom: destination_room)),
@@ -111,7 +112,7 @@ module LiveKit
     end
 
     def mute_published_track(room:, identity:, track_sid:, muted:)
-      self.rpc(
+      rpc!(
         :MutePublishedTrack,
         Proto::MuteRoomTrackRequest.new(
           room: room,
@@ -148,7 +149,7 @@ module LiveKit
         end
         req.attributes = attr_map
       end
-      self.rpc(
+      rpc!(
         :UpdateParticipant,
         req,
         headers:auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room)),
@@ -156,7 +157,7 @@ module LiveKit
     end
 
     def update_subscriptions(room:, identity:, track_sids:, subscribe:)
-      self.rpc(
+      rpc!(
         :UpdateSubscriptions,
         Proto::UpdateSubscriptionsRequest.new(
           room: room,
@@ -172,7 +173,7 @@ module LiveKit
         destination_sids: [],
         destination_identities: []
       )
-      self.rpc(
+      rpc!(
         :SendData,
         Proto::SendDataRequest.new(
           room: room,

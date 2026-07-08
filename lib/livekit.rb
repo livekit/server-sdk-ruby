@@ -3,6 +3,7 @@
 require "livekit/access_token"
 require "livekit/utils"
 require "livekit/grants"
+require "livekit/errors"
 require "livekit/token_verifier"
 require "livekit/version"
 
@@ -14,3 +15,4 @@ require "livekit/ingress_service_client"
 require "livekit/sip_service_client"
 require "livekit/agent_dispatch_service_client"
 require "livekit/connector_service_client"
+require "livekit/livekit_api"

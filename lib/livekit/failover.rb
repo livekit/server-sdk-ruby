@@ -5,6 +5,7 @@ require 'json'
 require 'set'
 require 'uri'
 require 'livekit/utils'
+require 'livekit/version'
 
 module LiveKit
   # Region failover for the Twirp API clients.
@@ -48,6 +49,7 @@ module LiveKit
     def self.connection(base_url, failover)
       url = File.join(Utils.to_http_url(base_url), '/twirp')
       Faraday.new(url: url) do |f|
+        f.headers['User-Agent'] = "livekit-server-sdk-ruby/#{VERSION}"
         f.options.timeout = DEFAULT_TIMEOUT
         f.use RegionFailoverMiddleware, failover: failover
         f.adapter Faraday.default_adapter

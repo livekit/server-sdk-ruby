@@ -11,10 +11,11 @@ module LiveKit
     include AuthMixin
     attr_accessor :api_key, :api_secret
 
-    def initialize(base_url, api_key: nil, api_secret: nil, failover: true)
-      super(LiveKit::Failover.connection(base_url, failover))
+    def initialize(base_url, api_key: nil, api_secret: nil, token: nil, failover: true, connection: nil)
+      super(connection || LiveKit::Failover.connection(base_url, failover))
       @api_key = api_key
       @api_secret = api_secret
+      @token = token
     end
 
     # Creates a new agent dispatch for a named agent
@@ -35,7 +36,7 @@ module LiveKit
         agent_name: agent_name,
         metadata: metadata,
       )
-      self.rpc(
+      rpc!(
         :CreateDispatch,
         request,
         headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name)),
@@ -51,7 +52,7 @@ module LiveKit
         dispatch_id: dispatch_id,
         room: room_name,
       )
-      self.rpc(
+      rpc!(
         :DeleteDispatch,
         request,
         headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name)),
@@ -67,7 +68,7 @@ module LiveKit
         dispatch_id: dispatch_id,
         room: room_name,
       )
-      res = self.rpc(
+      res = rpc!(
         :ListDispatch,
         request,
         headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name)),
@@ -85,7 +86,7 @@ module LiveKit
       request = Proto::ListAgentDispatchRequest.new(
         room: room_name,
       )
-      res = self.rpc(
+      res = rpc!(
         :ListDispatch,
         request,
         headers: auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name)),

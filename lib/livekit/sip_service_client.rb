@@ -10,10 +10,11 @@ module LiveKit
     include AuthMixin
     attr_accessor :api_key, :api_secret
 
-    def initialize(base_url, api_key: nil, api_secret: nil, failover: true)
-      super(LiveKit::Failover.connection(base_url, failover))
+    def initialize(base_url, api_key: nil, api_secret: nil, token: nil, failover: true, connection: nil)
+      super(connection || LiveKit::Failover.connection(base_url, failover))
       @api_key = api_key
       @api_secret = api_secret
+      @token = token
     end
 
     def create_sip_inbound_trunk(
@@ -54,7 +55,7 @@ module LiveKit
           krisp_enabled: krisp_enabled
         )
       )
-      self.rpc(
+      rpc!(
         :CreateSIPInboundTrunk,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -93,7 +94,7 @@ module LiveKit
           headers_to_attributes: headers_to_attributes
         )
       )
-      self.rpc(
+      rpc!(
         :CreateSIPOutboundTrunk,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -102,7 +103,7 @@ module LiveKit
 
     def list_sip_inbound_trunk
       request = Proto::ListSIPInboundTrunkRequest.new
-      self.rpc(
+      rpc!(
         :ListSIPInboundTrunk,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -111,7 +112,7 @@ module LiveKit
 
     def list_sip_outbound_trunk
       request = Proto::ListSIPOutboundTrunkRequest.new
-      self.rpc(
+      rpc!(
         :ListSIPOutboundTrunk,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -122,7 +123,7 @@ module LiveKit
       request = Proto::DeleteSIPTrunkRequest.new(
         sip_trunk_id: sip_trunk_id,
       )
-      self.rpc(
+      rpc!(
         :DeleteSIPTrunk,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -149,7 +150,7 @@ module LiveKit
         attributes: attributes,
         room_config: room_config,
       )
-      self.rpc(
+      rpc!(
         :CreateSIPDispatchRule,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -158,7 +159,7 @@ module LiveKit
 
     def list_sip_dispatch_rule
       request = Proto::ListSIPDispatchRuleRequest.new
-      self.rpc(
+      rpc!(
         :ListSIPDispatchRule,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -169,7 +170,7 @@ module LiveKit
       request = Proto::DeleteSIPDispatchRuleRequest.new(
         sip_dispatch_rule_id: sip_dispatch_rule_id,
       )
-      self.rpc(
+      rpc!(
         :DeleteSIPDispatchRule,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -180,8 +181,13 @@ module LiveKit
       sip_trunk_id,
       sip_call_to,
       room_name,
+      # Optional inline outbound trunk configuration (SIPOutboundConfig). Use
+      # instead of a stored sip_trunk_id to configure the trunk per call.
+      trunk: nil,
       # Optional SIP From number to use. If empty, trunk number is used.
       from_number: nil,
+      # Optional custom caller ID shown to the callee. Requires provider support.
+      display_name: nil,
       # Optional identity of the participant in LiveKit room
       participant_identity: nil,
       # Optional name of the participant in LiveKit room
@@ -212,8 +218,10 @@ module LiveKit
       ringing_timeout = DialTimeout::DEFAULT_RINGING_TIMEOUT if wait_until_answered && ringing_timeout.nil?
       request = Proto::CreateSIPParticipantRequest.new(
         sip_trunk_id: sip_trunk_id,
+        trunk: trunk,
         sip_call_to: sip_call_to,
         sip_number: from_number,
+        display_name: display_name,
         room_name: room_name,
         participant_identity: participant_identity,
         participant_name: participant_name,
@@ -231,7 +239,7 @@ module LiveKit
       # and the request must outlast ringing; otherwise honor any user timeout.
       effective_timeout = wait_until_answered ? DialTimeout.resolve(timeout, ringing_timeout) : timeout
       headers[Failover::TIMEOUT_HEADER] = effective_timeout.to_s if effective_timeout
-      self.rpc(:CreateSIPParticipant, request, headers: headers)
+      rpc!(:CreateSIPParticipant, request, headers: headers)
     end
 
     def transfer_sip_participant(
@@ -258,7 +266,7 @@ module LiveKit
       )
       headers = auth_header(video_grant: VideoGrant.new(roomAdmin: true, room: room_name), sip_grant: SIPGrant.new(call: true))
       headers[Failover::TIMEOUT_HEADER] = DialTimeout.resolve(timeout, ringing_timeout).to_s
-      self.rpc(:TransferSIPParticipant, request, headers: headers)
+      rpc!(:TransferSIPParticipant, request, headers: headers)
     end
 
     # Updates an existing SIP inbound trunk, replacing it entirely.
@@ -270,7 +278,7 @@ module LiveKit
         sip_trunk_id: sip_trunk_id,
         replace: trunk,
       )
-      self.rpc(
+      rpc!(
         :UpdateSIPInboundTrunk,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -287,7 +295,7 @@ module LiveKit
         sip_trunk_id: sip_trunk_id,
         update: update,
       )
-      self.rpc(
+      rpc!(
         :UpdateSIPInboundTrunk,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -303,7 +311,7 @@ module LiveKit
         sip_trunk_id: sip_trunk_id,
         replace: trunk,
       )
-      self.rpc(
+      rpc!(
         :UpdateSIPOutboundTrunk,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -320,7 +328,7 @@ module LiveKit
         sip_trunk_id: sip_trunk_id,
         update: update,
       )
-      self.rpc(
+      rpc!(
         :UpdateSIPOutboundTrunk,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -336,7 +344,7 @@ module LiveKit
         sip_dispatch_rule_id: sip_dispatch_rule_id,
         replace: rule,
       )
-      self.rpc(
+      rpc!(
         :UpdateSIPDispatchRule,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
@@ -353,7 +361,7 @@ module LiveKit
         sip_dispatch_rule_id: sip_dispatch_rule_id,
         update: update,
       )
-      self.rpc(
+      rpc!(
         :UpdateSIPDispatchRule,
         request,
         headers: auth_header(sip_grant: SIPGrant.new(admin: true)),
