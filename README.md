@@ -117,14 +117,18 @@ Every request to the server APIs is authenticated. There are two modes:
 - **Access token** — for frontend / client-side use, where the API secret must not be exposed. Pass a pre-signed [access token](https://docs.livekit.io/home/get-started/authentication/) that already carries the grants for the operations you'll perform; the SDK sends it verbatim.
 
 ```ruby
-# backend: API key & secret
+# backend (API key & secret): set LIVEKIT_URL, LIVEKIT_API_KEY, and
+# LIVEKIT_API_SECRET, then construct with no arguments...
+api = LiveKit::LiveKitAPI.new
+
+# ...or pass any of them explicitly to override the corresponding env var:
 api = LiveKit::LiveKitAPI.new('https://my.livekit.instance', api_key: 'yourkey', api_secret: 'yoursecret')
 
-# frontend: a pre-signed access token
-api = LiveKit::LiveKitAPI.new('https://my.livekit.instance', token: 'a-pre-signed-token')
+# frontend (pre-signed access token): with LIVEKIT_URL set, pass just the token:
+api = LiveKit::LiveKitAPI.new(token: 'a-pre-signed-token')
 ```
 
-The url and credentials fall back to the `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, and `LIVEKIT_TOKEN` environment variables.
+The url and credentials fall back to the `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, and `LIVEKIT_TOKEN` environment variables. Values you pass explicitly take precedence; the environment variables are used only as a fallback for arguments you omit — an ambient `LIVEKIT_TOKEN`, for example, won't override an explicitly-provided API key and secret.
 
 ### Server APIs
 
