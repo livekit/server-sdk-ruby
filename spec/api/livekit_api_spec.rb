@@ -89,6 +89,14 @@ RSpec.describe LiveKit::LiveKitAPI do
       api.egress.start_track_composite_egress('test-room', mp4.call,
                                               audio_track_id: 'TR_audio1', video_track_id: 'TR_video1')
       api.egress.start_track_egress('test-room', PB::DirectFileOutput.new(filepath: 'track.mp4'), 'TR_video1')
+      api.egress.start_egress(
+        room_name: 'test-room',
+        media: PB::MediaSource.new(video_track_id: 'TR_video1'),
+        outputs: PB::Output.new(
+          file: PB::FileOutput.new(file_type: PB::EncodedFileType::MP4, filepath: 'out.mp4')
+        ),
+        preset: PB::EncodingOptionsPreset::H264_1080P_30
+      )
       api.egress.update_layout('EG_abc123', 'speaker')
       api.egress.update_stream('EG_abc123', add_output_urls: ['rtmps://b.example.com/live/key'],
                                             remove_output_urls: ['rtmps://a.example.com/live/key'])
