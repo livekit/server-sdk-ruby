@@ -178,6 +178,44 @@ module LiveKit
       )
     end
 
+    def start_egress(
+      room_name: nil,
+      # source, only one of template, web or media could be set
+      # TemplateSource
+      template: nil,
+      # WebSource
+      web: nil,
+      # MediaSource
+      media: nil,
+      # EncodingOptionsPreset, only one of preset or advanced could be set
+      preset: nil,
+      # EncodingOptions, only one of preset or advanced could be set
+      advanced: nil,
+      # an Output or array of Output
+      outputs: nil,
+      # StorageConfig, default storage for outputs that don't set their own
+      storage: nil,
+      # list of extra webhooks to call for this request
+      webhooks: nil
+    )
+      request = Proto::StartEgressRequest.new(
+        room_name: room_name,
+        template: template,
+        web: web,
+        media: media,
+        preset: preset,
+        advanced: advanced,
+        outputs: outputs.nil? ? nil : Array(outputs),
+        storage: storage,
+        webhooks: webhooks,
+      )
+      rpc!(
+        :StartEgress,
+        request,
+        headers:auth_header(video_grant: VideoGrant.new(roomRecord: true)),
+      )
+    end
+
     def update_layout(egress_id, layout)
       rpc!(
         :UpdateLayout,
