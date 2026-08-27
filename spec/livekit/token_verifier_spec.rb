@@ -17,6 +17,18 @@ RSpec.describe LiveKit::TokenVerifier do
     expect(grant.attributes["mykey"]).to eq("myvalue")
   end
 
+  it "fails when exp is missing" do
+    payload = {
+      "iss" => TEST_KEY,
+      "sub" => "user",
+      "nbf" => Time.now.to_i - 5,
+      "video" => { "roomJoin" => true, "room" => "testroom" },
+    }
+    jwt = JWT.encode(payload, TEST_SECRET, "HS256")
+    v = described_class.new(api_key: TEST_KEY, api_secret: TEST_SECRET)
+    expect { v.verify(jwt) }.to raise_error(JWT::MissingRequiredClaim)
+  end
+
   it "fails on expired tokens" do
     token = LiveKit::AccessToken.new(api_key: TEST_KEY, api_secret: TEST_SECRET,
                                      identity: "test_identity", ttl: -10)

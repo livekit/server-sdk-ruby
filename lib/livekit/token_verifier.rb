@@ -10,7 +10,15 @@ module LiveKit
     end
 
     def verify(token)
-      decoded_token = JWT.decode(token, @api_secret, true, algorithm: AccessToken::SIGNING_ALGORITHM)
+      decoded_token = JWT.decode(
+        token,
+        @api_secret,
+        true,
+        {
+          algorithm: AccessToken::SIGNING_ALGORITHM,
+          required_claims: ["exp"],
+        },
+      )
       decoded = decoded_token.first
       if decoded["iss"] != @api_key
         raise "Invalid issuer"

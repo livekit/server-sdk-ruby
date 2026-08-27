@@ -4,7 +4,7 @@ PATH
     livekit-server-sdk (1.0.0)
       faraday (>= 2.0, < 3.0)
       google-protobuf (~> 4.30, >= 4.30.2)
-      jwt (>= 2.2.3, < 3.0)
+      jwt (>= 2.3.0, < 3.0)
       twirp (~> 1.13, >= 1.13.1)
 
 GEM
