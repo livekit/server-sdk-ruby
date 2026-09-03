@@ -164,7 +164,7 @@ Failed API calls raise `LiveKit::ServerError`, which exposes the error `code`, m
 begin
   api.sip.create_sip_participant('trunk-id', '+15105550100', 'my-room', wait_until_answered: true)
 rescue LiveKit::SipCallError => e
-  puts e                 # e.g. "SIP call failed: 486 Busy Here (resource_exhausted)"
+  puts e                 # e.g. "SIP call failed: 486 Busy Here (failed_precondition)"
   puts e.sip_status_code # 486
 rescue LiveKit::ServerError => e
   puts e.code
