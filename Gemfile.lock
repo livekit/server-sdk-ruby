@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    livekit-server-sdk (1.0.0)
+    livekit-server-sdk (1.1.0)
       faraday (>= 2.0, < 3.0)
       google-protobuf (~> 4.30, >= 4.30.2)
       jwt (>= 2.3.0, < 3.0)
