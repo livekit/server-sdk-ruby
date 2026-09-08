@@ -268,7 +268,7 @@ RSpec.describe LiveKit::LiveKitAPI do
   it 'surfaces a busy signal as SipCallError' do
     e = sip_error({ 'code' => 486, 'status' => 'Busy Here' })
     expect(e).to be_a(LiveKit::ServerError)
-    expect(e.code).to eq('resource_exhausted')
+    expect(e.code).to eq('failed_precondition')
     expect(e.sip_status_code).to eq(486)
     expect(e.sip_status).to eq('Busy Here')
     expect(e.to_s).to include('486').and include('Busy Here')
