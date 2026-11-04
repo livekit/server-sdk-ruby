@@ -11,7 +11,8 @@ jobs:
       matrix:
         include:
           # Ruby 3.1 is the floor (google-protobuf 4.x requires >= 3.1; 3.0 is EOL).
-          - { os: ubuntu-latest, ruby_version: "3.1" }
+          # setup-ruby has no Ruby 3.1 build for ubuntu-26.04, which ubuntu-latest now points to.
+          - { os: ubuntu-24.04, ruby_version: "3.1" }
           - { os: ubuntu-latest, ruby_version: "3.4" }
           - { os: ubuntu-latest, ruby_version: "jruby-9.4" }
     steps:
