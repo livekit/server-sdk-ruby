@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Added
+
+- `lib/livekit/server/sdk.rb`, so `Bundler.require` loads the gem from a plain `gem "livekit-server-sdk"` Gemfile line without needing `require: "livekit"`.
+
 ## [1.1.0]
 
 ### Added
